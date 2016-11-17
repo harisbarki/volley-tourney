@@ -1,3 +1,5 @@
+package Model;
+
 /*
  * This class is for the players in the teams.
 */

@@ -1,3 +1,4 @@
+package Model;
 
 /*
  * This abstract class is the basis for all accounts which stores basic 

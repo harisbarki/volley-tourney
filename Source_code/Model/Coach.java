@@ -1,3 +1,5 @@
+package Model;
+
 import java.util.List;
 /* 
  * This class can only be accessible once a coach logs into the system. It gives 
