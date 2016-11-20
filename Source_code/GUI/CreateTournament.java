@@ -4,13 +4,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.CardLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import java.awt.MenuBar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
-
+import org.jdesktop.swingx.JXDatePicker;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import javax.swing.JSpinner; 
 
 @SuppressWarnings("serial")
 public class CreateTournament extends JFrame {
@@ -24,23 +29,23 @@ public class CreateTournament extends JFrame {
 	private JButton btnCreateTournament;
 
 	private JPanel create_tournament_panel;
-	private GroupLayout gl_main_menu_panel;
 	private JTextField text_field_name;
 	private JLabel lblRegistrationStartDate;
-	private JTextField text_field_registration_SD;
 	private MenuBar menuBar;
 	private JLabel lblRegistrationEndDate;
-	private JTextField textField;
 	private JLabel lblTournamentStartDate;
-	private JTextField textField_1;
 	private JLabel lblTournamentEndDate;
-	private JTextField textField_2;
 	private JLabel lblPlayersMinimumAge;
-	private JTextField textField_3;
 	private JLabel lblPlayersMaximumAge;
-	private JTextField textField_4;
-	private JLabel lblDivision;
-
+	private JLabel lblFormat;
+	private JXDatePicker text_field_registration_SD;
+	private JXDatePicker text_field_registration_ED;
+	private JXDatePicker text_field_tournament_SD;
+	private JXDatePicker text_field_tournament_ED;
+	private JRadioButton rdbtnSingleElimination;
+	private JRadioButton rdbtnDivision;
+	private JSpinner text_field_player_minage;
+	private  JSpinner text_field_player_maxage;
 	
 	/**
 	 * Create the frame for main menu.
@@ -69,155 +74,127 @@ public class CreateTournament extends JFrame {
 		contentPane.add(create_tournament_panel, "name_198748065381796");
 		
 		JLabel lblName = new JLabel("Name");
+		lblName.setBounds(48, 57, 164, 14);
 		
 		text_field_name = new JTextField();
+		text_field_name.setBounds(390, 57, 142, 20);
 		text_field_name.setToolTipText("Please enter name of tournament");
 		lblName.setLabelFor(text_field_name);
 		text_field_name.setColumns(10);
 		
 		lblRegistrationStartDate = new JLabel("Registration Start Date");
-		
-		text_field_registration_SD = new JTextField();
-		text_field_registration_SD.setToolTipText("Please enter name of tournament");
-		text_field_registration_SD.setColumns(10);
+		lblRegistrationStartDate.setBounds(48, 89, 161, 14);
 		
 		lblRegistrationEndDate = new JLabel("Registration End Date");
-		
-		textField = new JTextField();
-		textField.setToolTipText("Please enter name of tournament");
-		textField.setColumns(10);
+		lblRegistrationEndDate.setBounds(48, 132, 172, 14);
 		
 		lblTournamentStartDate = new JLabel("Tournament Start Date");
-		
-		textField_1 = new JTextField();
-		textField_1.setToolTipText("Please enter name of tournament");
-		textField_1.setColumns(10);
+		lblTournamentStartDate.setBounds(48, 170, 171, 14);
 		
 		lblTournamentEndDate = new JLabel("Tournament End Date");
-		
-		textField_2 = new JTextField();
-		textField_2.setToolTipText("Please enter name of tournament");
-		textField_2.setColumns(10);
+		lblTournamentEndDate.setBounds(48, 208, 170, 14);
 		
 		lblPlayersMinimumAge = new JLabel("Player's Minimum Age");
-		
-		textField_3 = new JTextField();
-		textField_3.setToolTipText("Please enter name of tournament");
-		textField_3.setColumns(10);
+		lblPlayersMinimumAge.setBounds(48, 254, 175, 14);
 		
 		lblPlayersMaximumAge = new JLabel("Player's Maximum Age");
+		lblPlayersMaximumAge.setBounds(48, 291, 187, 14);
 		
-		textField_4 = new JTextField();
-		textField_4.setToolTipText("Please enter name of tournament");
-		textField_4.setColumns(10);
+		// Round Buttons
+		lblFormat = new JLabel("Format");
+		lblFormat.setBounds(48, 338, 88, 14);
+		rdbtnSingleElimination = new JRadioButton("Single Elimination");
+		rdbtnSingleElimination.setBounds(318, 334, 126, 23);
+		rdbtnDivision = new JRadioButton("Division");
+		rdbtnDivision.setBounds(460, 332, 94, 23);
+		ButtonGroup formatGroup = new ButtonGroup();
+		formatGroup.add(rdbtnSingleElimination);
+		formatGroup.add(rdbtnDivision);
 		
-		lblDivision = new JLabel("Format");
+		create_tournament_panel.setLayout(null);
 		
-		JRadioButton rdbtnSingleElimination = new JRadioButton("Single Elimination");
+		btnCreateTournament = new JButton("Create Tournament");
+		btnCreateTournament.setBounds(48, 376, 175, 23);
+		btnCreateTournament.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				validateFields();
+			}
+		});
+			
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Division");
 		
-		JButton btnCreateTournament_1 = new JButton("Create Tournament");
-		GroupLayout gl_create_tournament_panel = new GroupLayout(create_tournament_panel);
-		gl_create_tournament_panel.setHorizontalGroup(
-			gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_create_tournament_panel.createSequentialGroup()
-					.addGap(48)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnCreateTournament_1)
-						.addGroup(gl_create_tournament_panel.createSequentialGroup()
-							.addComponent(lblDivision)
-							.addGap(18)
-							.addComponent(rdbtnSingleElimination)
-							.addGap(18)
-							.addComponent(rdbtnNewRadioButton))
-						.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.TRAILING)
-							.addGroup(gl_create_tournament_panel.createSequentialGroup()
-								.addComponent(lblPlayersMaximumAge, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-								.addGap(62)
-								.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_create_tournament_panel.createSequentialGroup()
-									.addComponent(lblPlayersMinimumAge, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-									.addGap(62)
-									.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_create_tournament_panel.createSequentialGroup()
-									.addComponent(lblTournamentEndDate, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-									.addGap(62)
-									.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_create_tournament_panel.createSequentialGroup()
-									.addComponent(lblTournamentStartDate, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-									.addGap(62)
-									.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_create_tournament_panel.createSequentialGroup()
-									.addComponent(lblRegistrationEndDate, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-									.addGap(62)
-									.addComponent(textField, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_create_tournament_panel.createSequentialGroup()
-									.addComponent(lblRegistrationStartDate, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
-									.addGap(62)
-									.addComponent(text_field_registration_SD, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_create_tournament_panel.createSequentialGroup()
-									.addComponent(lblName)
-									.addGap(170)
-									.addComponent(text_field_name, GroupLayout.PREFERRED_SIZE, 142, GroupLayout.PREFERRED_SIZE)))))
-					.addContainerGap(197, Short.MAX_VALUE))
-		);
-		gl_create_tournament_panel.setVerticalGroup(
-			gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_create_tournament_panel.createSequentialGroup()
-					.addGap(57)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblName)
-						.addComponent(text_field_name, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblRegistrationStartDate)
-						.addComponent(text_field_registration_SD, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_create_tournament_panel.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblRegistrationEndDate))
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_create_tournament_panel.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblTournamentStartDate))
-						.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_create_tournament_panel.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblTournamentEndDate))
-						.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(26)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_create_tournament_panel.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblPlayersMinimumAge))
-						.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_create_tournament_panel.createSequentialGroup()
-							.addGap(3)
-							.addComponent(lblPlayersMaximumAge))
-						.addComponent(textField_4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_create_tournament_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblDivision)
-						.addComponent(rdbtnSingleElimination)
-						.addComponent(rdbtnNewRadioButton))
-					.addGap(35)
-					.addComponent(btnCreateTournament_1)
-					.addContainerGap(141, Short.MAX_VALUE))
-		);
-		create_tournament_panel.setLayout(gl_create_tournament_panel);
+		create_tournament_panel.add(btnCreateTournament);
+		create_tournament_panel.add(lblName);
+		create_tournament_panel.add(lblRegistrationStartDate);
+		create_tournament_panel.add(lblRegistrationEndDate);
+		create_tournament_panel.add(lblTournamentStartDate);
+		create_tournament_panel.add(lblTournamentEndDate);
+		create_tournament_panel.add(lblPlayersMinimumAge);
+		create_tournament_panel.add(lblPlayersMaximumAge);
+		create_tournament_panel.add(text_field_name);
+		create_tournament_panel.add(lblFormat);
+		create_tournament_panel.add(rdbtnSingleElimination);
+		create_tournament_panel.add(rdbtnDivision);
+
+        text_field_registration_SD = new JXDatePicker();
+        text_field_registration_SD.setSize(100, 23);
+        text_field_registration_SD.setLocation(432, 89);
+        text_field_registration_SD.setDate(Calendar.getInstance().getTime());
+        text_field_registration_SD.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+
+        create_tournament_panel.add(text_field_registration_SD);
+        
+        text_field_registration_ED = new JXDatePicker();
+        text_field_registration_ED.setBounds(432, 128, 100, 23);
+        text_field_registration_ED.setDate(Calendar.getInstance().getTime());
+        text_field_registration_ED.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        create_tournament_panel.add(text_field_registration_ED);
+        
+        text_field_tournament_SD = new JXDatePicker();
+        text_field_tournament_SD.setBounds(432, 166, 100, 23);
+        text_field_tournament_SD.setDate(Calendar.getInstance().getTime());
+        text_field_tournament_SD.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        create_tournament_panel.add(text_field_tournament_SD);
+        
+        text_field_tournament_ED = new JXDatePicker();
+        text_field_tournament_ED.setBounds(432, 204, 100, 23);
+        text_field_tournament_ED.setDate(Calendar.getInstance().getTime());
+        text_field_tournament_ED.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+        create_tournament_panel.add(text_field_tournament_ED);
+        
+        text_field_player_minage = new JSpinner();
+        text_field_player_minage.setBounds(445, 251, 57, 20);
+        text_field_player_minage.setValue(18);
+        create_tournament_panel.add(text_field_player_minage);
+        
+        text_field_player_maxage = new JSpinner();
+        text_field_player_maxage.setBounds(445, 288, 57, 20);
+        text_field_player_maxage.setValue(50);
+        create_tournament_panel.add(text_field_player_maxage);
 	
 	}
 	
 	public void disposeTournament() {
 		dispose();
+	}
+	
+	private boolean validateFields() {
+		System.out.println(text_field_registration_SD.getDate());
+
+		
+		if (text_field_name.getText().isEmpty()) {
+			errorMsg("Name cannot be empty");
+		}
+		else if (text_field_registration_SD.getDate().compareTo(Calendar.getInstance().getTime()) < 0) {
+			errorMsg("Date before today.");
+		}
+		
+		
+		return false;
+	}
+	
+	private void errorMsg(String message) {
+        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
