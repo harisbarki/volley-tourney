@@ -1,3 +1,5 @@
+package GUI;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -9,12 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JSeparator;
 import javax.swing.JScrollBar;
+import javax.swing.JComboBox;
 
 public class RegisterTeam extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField teamNameTextField;
 	private JTextField playerNameTextField;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -44,31 +48,44 @@ public class RegisterTeam extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		teamNameTextField = new JTextField();
 		teamNameTextField.setBounds(84, 61, 114, 19);
 		contentPane.add(teamNameTextField);
 		teamNameTextField.setColumns(10);
-		
+
 		JLabel teamNameLabel = new JLabel("Name:");
 		teamNameLabel.setBounds(12, 63, 70, 15);
 		contentPane.add(teamNameLabel);
-		
+
 		JList list = new JList();
 		list.setBounds(259, 50, 125, 142);
 		contentPane.add(list);
-		
+
 		JLabel lblPlayerDetails = new JLabel("Player Details");
 		lblPlayerDetails.setBounds(12, 140, 186, 15);
 		contentPane.add(lblPlayerDetails);
-		
+
 		playerNameTextField = new JTextField();
-		playerNameTextField.setBounds(84, 199, 114, 19);
+		playerNameTextField.setBounds(84, 173, 114, 19);
 		contentPane.add(playerNameTextField);
 		playerNameTextField.setColumns(10);
-		
+
 		JLabel playerNameLabel = new JLabel("Name:");
 		playerNameLabel.setBounds(12, 177, 70, 15);
 		contentPane.add(playerNameLabel);
+
+		JLabel lblAge = new JLabel("Age:");
+		lblAge.setBounds(12, 212, 70, 15);
+		contentPane.add(lblAge);
+
+		textField = new JTextField();
+		textField.setBounds(84, 210, 114, 19);
+		contentPane.add(textField);
+		textField.setColumns(10);
+
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(12, 259, 186, 24);
+		contentPane.add(comboBox);
 	}
 }
