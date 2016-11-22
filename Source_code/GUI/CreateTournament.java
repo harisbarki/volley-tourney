@@ -1,64 +1,107 @@
 package GUI;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.CardLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.border.EmptyBorder;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import org.jdesktop.swingx.JXDatePicker;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import javax.swing.JSpinner; 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Properties;
+import org.jdatepicker.impl.UtilDateModel;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.JDatePanelImpl;
 
-@SuppressWarnings("serial")
-public class CreateTournament extends JFrame {
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
+import org.w3c.dom.*;
+
+import Model.Tournament;
+import GUI.TopMenu;
+
+/**
+ * This class is used to display the create tournament
+ * frame which is used to create a new tournament.
+ */
+public class CreateTournament extends JFrame implements ActionListener
+{
+	// instance variables
+	private final int WIDTH  = 550;
+	private final int HEIGHT = 600;
+
+	private JLabel tNameLbl;
+	private JLabel tStartDateLbl;
+	private JLabel tEndDateLbl;
+	private JLabel regStartDateLbl;
+	private JLabel regEndDateLbl;
+	private JLabel minAgeLbl;
+	private JLabel maxAgeLbl;
+	private JLabel numTeamsLbl;
+	private JLabel formatLbl;
 	
-	private static final int FRAME_WIDTH = 600;
-	private static final int FRAME_HEIGHT = 600;
-	private static final int FRAME_START_X = 0;
-	private static final int FRAME_START_Y = 0;
-
-	private JPanel contentPane;
-	private JButton btnCreateTournament;
-
-	private JPanel create_tournament_panel;
-	private JTextField text_field_name;
-	private JLabel lblRegistrationStartDate;
+	private JLabel tNameErr;
+	private JLabel tStartDateErr;
+	private JLabel tEndDateErr;
+	private JLabel regStartDateErr;
+	private JLabel regEndDateErr;
+	private JLabel requiredErr;
+	
+	private JTextField tName;
+	
+	private JSpinner numTeams;
+	private JSpinner minAge;
+	private JSpinner maxAge;
+	
+	private JDatePickerImpl tStartDate;
+	private JDatePickerImpl tEndDate;
+	private JDatePickerImpl regStartDate;
+	private JDatePickerImpl regEndDate;
+	
+	private JRadioButton formatDiv;
+	private JRadioButton formatSE;
+	private JButton submit;
+	
 	private MenuBar menuBar;
-	private JLabel lblRegistrationEndDate;
-	private JLabel lblTournamentStartDate;
-	private JLabel lblTournamentEndDate;
-	private JLabel lblPlayersMinimumAge;
-	private JLabel lblPlayersMaximumAge;
-	private JLabel lblFormat;
-	private JXDatePicker text_field_registration_SD;
-	private JXDatePicker text_field_registration_ED;
-	private JXDatePicker text_field_tournament_SD;
-	private JXDatePicker text_field_tournament_ED;
-	private JRadioButton rdbtnSingleElimination;
-	private JRadioButton rdbtnDivision;
-	private JSpinner text_field_player_minage;
-	private  JSpinner text_field_player_maxage;
-	
-	/**
-	 * Create the frame for main menu.
-	 */
-	public CreateTournament() {
-		init();				
+
+	public CreateTournament()
+	{
+		addComponents();
 	}
-	
-	// Initializes the main menu
-	private void init () {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(FRAME_START_X, FRAME_START_Y, FRAME_WIDTH, FRAME_HEIGHT);
-		
+
+	/**
+	 * This method builds the gui.
+	 */
+	public void addComponents()
+	{
+		// set default frame properties
+		setTitle("Create Tournament");
+		setSize(WIDTH,HEIGHT);
+		setLocation(10,10);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new BorderLayout());
+		setResizable(false);
 		
 		// Getting the Top Menu and initializing it in this pane
 		TopMenu tm = new TopMenu(this);
@@ -66,135 +109,498 @@ public class CreateTournament extends JFrame {
 		setMenuBar(menuBar);
 		tm.initializeMenuBar(menuBar);
 		
+		// create and format main panel
+		JPanel mainPanel = new JPanel();
+		mainPanel.setSize(400,400);
+		GridBagLayout gridbag = new GridBagLayout();
+		mainPanel.setLayout(gridbag);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.insets = new Insets(10,10,10,10);
+		gbc.anchor = GridBagConstraints.WEST;
+
+		// create labels for fields
+		tNameLbl = new JLabel("Tournament Name:");
+		tStartDateLbl = new JLabel("Tournament Start Date:");
+		tEndDateLbl = new JLabel("Tournament End Date:");
+		regStartDateLbl = new JLabel("Registration Start Date:");
+		regEndDateLbl = new JLabel("Registration End Date:");
+		minAgeLbl = new JLabel("Minimum Player Age:");
+		maxAgeLbl = new JLabel("Maximum Player Age:");
+		numTeamsLbl = new JLabel("Number of Teams:");
+		formatLbl = new JLabel("Tournament Format:");
 		
-		contentPane = new JPanel();
-		setContentPane(contentPane);
-		contentPane.setLayout(new CardLayout(0, 0));
-		create_tournament_panel = new JPanel();
-		contentPane.add(create_tournament_panel, "name_198748065381796");
+		// error labels
+		tNameErr = new JLabel("*");
+		tStartDateErr = new JLabel("*");
+		tEndDateErr = new JLabel("*");
+		regStartDateErr = new JLabel("*");
+		regEndDateErr = new JLabel("*");
+		requiredErr = new JLabel("*Please fill in the required fields");
 		
-		JLabel lblName = new JLabel("Name");
-		lblName.setBounds(48, 57, 164, 14);
+		tNameErr.setForeground(Color.RED);
+		tStartDateErr.setForeground(Color.RED);
+		tEndDateErr.setForeground(Color.RED);
+		regStartDateErr.setForeground(Color.RED);
+		regEndDateErr.setForeground(Color.RED);
+		requiredErr.setForeground(Color.RED);
 		
-		text_field_name = new JTextField();
-		text_field_name.setBounds(390, 57, 142, 20);
-		text_field_name.setToolTipText("Please enter name of tournament");
-		lblName.setLabelFor(text_field_name);
-		text_field_name.setColumns(10);
+		// hide errors
+		tNameErr.setVisible(false);
+		tStartDateErr.setVisible(false);
+		tEndDateErr.setVisible(false);
+		regStartDateErr.setVisible(false);
+		regEndDateErr.setVisible(false);
+		requiredErr.setVisible(false);
 		
-		lblRegistrationStartDate = new JLabel("Registration Start Date");
-		lblRegistrationStartDate.setBounds(48, 89, 161, 14);
+		/* create fields for input */
+		// text field
+		tName = new JTextField(18);
+
+		// date pickers
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
 		
-		lblRegistrationEndDate = new JLabel("Registration End Date");
-		lblRegistrationEndDate.setBounds(48, 132, 172, 14);
+		UtilDateModel tSDModel = new UtilDateModel();
+		JDatePanelImpl tSDPanel = new JDatePanelImpl(tSDModel, p);
+		tStartDate = new JDatePickerImpl(tSDPanel, new DateLabelFormatter());
 		
-		lblTournamentStartDate = new JLabel("Tournament Start Date");
-		lblTournamentStartDate.setBounds(48, 170, 171, 14);
+		UtilDateModel tEDModel = new UtilDateModel();
+		JDatePanelImpl tEDPanel = new JDatePanelImpl(tEDModel, p);
+		tEndDate = new JDatePickerImpl(tEDPanel, new DateLabelFormatter());
 		
-		lblTournamentEndDate = new JLabel("Tournament End Date");
-		lblTournamentEndDate.setBounds(48, 208, 170, 14);
+		UtilDateModel rSDModel = new UtilDateModel();
+		JDatePanelImpl rSDPanel = new JDatePanelImpl(rSDModel, p);
+		regStartDate = new JDatePickerImpl(rSDPanel, new DateLabelFormatter());
 		
-		lblPlayersMinimumAge = new JLabel("Player's Minimum Age");
-		lblPlayersMinimumAge.setBounds(48, 254, 175, 14);
+		UtilDateModel rEDModel = new UtilDateModel();
+		JDatePanelImpl rEDPanel = new JDatePanelImpl(rEDModel	, p);
+		regEndDate = new JDatePickerImpl(rEDPanel, new DateLabelFormatter());
 		
-		lblPlayersMaximumAge = new JLabel("Player's Maximum Age");
-		lblPlayersMaximumAge.setBounds(48, 291, 187, 14);
+		// counters
+		SpinnerModel minModel = new SpinnerNumberModel(10,10,100,1);
+		minAge = new JSpinner(minModel);
 		
-		// Round Buttons
-		lblFormat = new JLabel("Format");
-		lblFormat.setBounds(48, 338, 88, 14);
-		rdbtnSingleElimination = new JRadioButton("Single Elimination");
-		rdbtnSingleElimination.setBounds(318, 334, 126, 23);
-		rdbtnDivision = new JRadioButton("Division");
-		rdbtnDivision.setBounds(460, 332, 94, 23);
-		ButtonGroup formatGroup = new ButtonGroup();
-		formatGroup.add(rdbtnSingleElimination);
-		formatGroup.add(rdbtnDivision);
+		SpinnerModel maxModel = new SpinnerNumberModel(20,10,100,1);
+		maxAge = new JSpinner(maxModel);
+
+		SpinnerModel numModel = new SpinnerNumberModel(2,2,100,1);
+		numTeams = new JSpinner(numModel);
+
+		// radio buttons
+		formatDiv = new JRadioButton("Divisions");
+		formatSE = new JRadioButton("Single Elimination");
+		ButtonGroup formatChoice = new ButtonGroup();
+		formatChoice.add(formatDiv);
+		formatChoice.add(formatSE);
+		formatDiv.setSelected(true);
 		
-		create_tournament_panel.setLayout(null);
+		// main button
+		submit = new JButton("Create");
+
+		// arrange components and add to main panel
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		mainPanel.add(tNameLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(tName, gbc);
 		
-		btnCreateTournament = new JButton("Create Tournament");
-		btnCreateTournament.setBounds(48, 376, 175, 23);
-		btnCreateTournament.addActionListener(new ActionListener() {			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				validateFields();
-			}
-		});
+		gbc.gridx = 2;
+		mainPanel.add(tNameErr, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		mainPanel.add(regStartDateLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(regStartDate, gbc);
+		
+		gbc.gridx = 2;
+		mainPanel.add(regStartDateErr, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		mainPanel.add(regEndDateLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(regEndDate, gbc);
+		
+		gbc.gridx = 2;
+		mainPanel.add(regEndDateErr, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		mainPanel.add(tStartDateLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(tStartDate, gbc);
+		
+		gbc.gridx = 2;
+		mainPanel.add(tStartDateErr, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 4;
+		mainPanel.add(tEndDateLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(tEndDate, gbc);
+		
+		gbc.gridx = 2;
+		mainPanel.add(tEndDateErr, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 5;
+		mainPanel.add(minAgeLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(minAge, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		mainPanel.add(maxAgeLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(maxAge, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 7;
+		mainPanel.add(numTeamsLbl, gbc);
+
+		gbc.gridx = 1;
+		mainPanel.add(numTeams, gbc);
+
+		gbc.gridx = 0;
+		gbc.gridy = 8;
+		mainPanel.add(formatLbl, gbc);
+
+		gbc.gridx = 1;
+		gbc.insets = new Insets(0,5,0,0);
+		mainPanel.add(formatDiv, gbc);
+		
+		gbc.gridy = 9;
+		mainPanel.add(formatSE, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 10;
+		gbc.gridwidth = 2;
+		gbc.insets = new Insets(20,0,0,0);
+		gbc.anchor = GridBagConstraints.CENTER;
+		mainPanel.add(requiredErr, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 11;
+		gbc.gridwidth = 2;
+		gbc.insets = new Insets(30,0,0,0);
+		gbc.anchor = GridBagConstraints.CENTER;
+		mainPanel.add(submit, gbc);
+		
+		submit.addActionListener(this);
+
+		// set border and add main panel to frame
+		mainPanel.setBorder(new EmptyBorder(30,0,30,0));
+		add(mainPanel, BorderLayout.NORTH);
+		
+		// display frame
+		setVisible(true);
+	}
+	
+	/**
+	 * This method is executed when the create button is clicked.
+	 */
+	public void actionPerformed(ActionEvent e)
+	{
+		boolean empty = false;
+		boolean valid = true;
+		
+		// properties of a tournament
+		String name;
+		String type;
+		LocalDate startDate;
+		LocalDate endDate;
+		LocalDate rStartDate;
+		LocalDate rEndDate;
+		int minPlayerAge;
+		int maxPlayerAge;
+		int teams;
+		
+		// check for empty fields
+		if(tName.getText().equals(""))
+		{
+			tNameErr.setVisible(true);
+			requiredErr.setVisible(true);
+			empty = true;
+		}
+		else
+		{
+			tNameErr.setVisible(false);
+		}
+		
+		if(tStartDate.getJFormattedTextField().getText().equals(""))
+		{
+			tStartDateErr.setVisible(true);
+			requiredErr.setVisible(true);
+			empty = true;
+		}
+		else
+		{
+			tStartDateErr.setVisible(false);
+		}
+		
+		if(tEndDate.getJFormattedTextField().getText().equals(""))
+		{
+			tEndDateErr.setVisible(true);
+			requiredErr.setVisible(true);
+			empty = true;
+		}
+		else
+		{
+			tEndDateErr.setVisible(false);
+		}
+		
+		if(regStartDate.getJFormattedTextField().getText().equals(""))
+		{
+			regStartDateErr.setVisible(true);
+			requiredErr.setVisible(true);
+			empty = true;
+		}
+		else
+		{
+			regStartDateErr.setVisible(false);
+		}
+		
+		if(regEndDate.getJFormattedTextField().getText().equals(""))
+		{
+			regEndDateErr.setVisible(true);
+			requiredErr.setVisible(true);
+			empty = true;
+		}
+		else
+		{
+			regEndDateErr.setVisible(false);
+		}
+		
+		// validate fields
+		if(!empty)
+		{
+			// hide errors
+			tNameErr.setVisible(false);
+			tStartDateErr.setVisible(false);
+			tEndDateErr.setVisible(false);
+			regStartDateErr.setVisible(false);
+			regEndDateErr.setVisible(false);
+			requiredErr.setVisible(false);
 			
-		
-		
-		create_tournament_panel.add(btnCreateTournament);
-		create_tournament_panel.add(lblName);
-		create_tournament_panel.add(lblRegistrationStartDate);
-		create_tournament_panel.add(lblRegistrationEndDate);
-		create_tournament_panel.add(lblTournamentStartDate);
-		create_tournament_panel.add(lblTournamentEndDate);
-		create_tournament_panel.add(lblPlayersMinimumAge);
-		create_tournament_panel.add(lblPlayersMaximumAge);
-		create_tournament_panel.add(text_field_name);
-		create_tournament_panel.add(lblFormat);
-		create_tournament_panel.add(rdbtnSingleElimination);
-		create_tournament_panel.add(rdbtnDivision);
-
-        text_field_registration_SD = new JXDatePicker();
-        text_field_registration_SD.setSize(100, 23);
-        text_field_registration_SD.setLocation(432, 89);
-        text_field_registration_SD.setDate(Calendar.getInstance().getTime());
-        text_field_registration_SD.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-
-        create_tournament_panel.add(text_field_registration_SD);
-        
-        text_field_registration_ED = new JXDatePicker();
-        text_field_registration_ED.setBounds(432, 128, 100, 23);
-        text_field_registration_ED.setDate(Calendar.getInstance().getTime());
-        text_field_registration_ED.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        create_tournament_panel.add(text_field_registration_ED);
-        
-        text_field_tournament_SD = new JXDatePicker();
-        text_field_tournament_SD.setBounds(432, 166, 100, 23);
-        text_field_tournament_SD.setDate(Calendar.getInstance().getTime());
-        text_field_tournament_SD.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        create_tournament_panel.add(text_field_tournament_SD);
-        
-        text_field_tournament_ED = new JXDatePicker();
-        text_field_tournament_ED.setBounds(432, 204, 100, 23);
-        text_field_tournament_ED.setDate(Calendar.getInstance().getTime());
-        text_field_tournament_ED.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
-        create_tournament_panel.add(text_field_tournament_ED);
-        
-        text_field_player_minage = new JSpinner();
-        text_field_player_minage.setBounds(445, 251, 57, 20);
-        text_field_player_minage.setValue(18);
-        create_tournament_panel.add(text_field_player_minage);
-        
-        text_field_player_maxage = new JSpinner();
-        text_field_player_maxage.setBounds(445, 288, 57, 20);
-        text_field_player_maxage.setValue(50);
-        create_tournament_panel.add(text_field_player_maxage);
-	
-	}
-	
-	public void disposeTournament() {
-		dispose();
-	}
-	
-	private boolean validateFields() {
-		System.out.println(text_field_registration_SD.getDate());
-
-		
-		if (text_field_name.getText().isEmpty()) {
-			errorMsg("Name cannot be empty");
+			/* get tournament properties */
+			// get name
+			name = tName.getText();
+			
+			// get type based on selection
+			if(formatDiv.isSelected())
+				type = formatDiv.getText();
+			else
+				type = formatSE.getText();
+			
+			// get min age, max age and num of teams
+			minPlayerAge = (int) minAge.getValue(); 
+			maxPlayerAge = (int) maxAge.getValue();
+			teams = (int) numTeams.getValue();
+			
+			// get dates
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			startDate = LocalDate.parse(tStartDate.getJFormattedTextField().getText(), df);
+			endDate = LocalDate.parse(tEndDate.getJFormattedTextField().getText(), df);
+			rStartDate = LocalDate.parse(regStartDate.getJFormattedTextField().getText(), df);
+			rEndDate = LocalDate.parse(regEndDate.getJFormattedTextField().getText(), df);
+			
+			// check dates
+			if(startDate.compareTo(endDate) > 0 || rStartDate.compareTo(rEndDate) > 0)
+			{
+				if(startDate.compareTo(endDate) > 0)
+				{
+					tStartDateErr.setVisible(true);
+					tEndDateErr.setVisible(true);
+				}
+				
+				if(rStartDate.compareTo(rEndDate) > 0)
+				{
+					regStartDateErr.setVisible(true);
+					regEndDateErr.setVisible(true);
+				}
+				
+				JOptionPane.showMessageDialog(this, "Start date cannot be after than end date!");
+				valid = false;
+			}
+			else
+			{
+				if(rEndDate.compareTo(startDate) > 0)
+				{
+					JOptionPane.showMessageDialog(this, "Registration should end before tournament begins!");
+					regEndDateErr.setVisible(true);
+					valid = false;
+				}				
+			}
+			
+			// proceed to create and save tournament if dates are valid
+			if(valid)
+			{
+				// hide errors
+				tStartDateErr.setVisible(false);
+				tEndDateErr.setVisible(false);
+				regStartDateErr.setVisible(false);
+				regEndDateErr.setVisible(false);
+				
+				// create tournament object
+				Tournament t = new Tournament(name, type, startDate, endDate, rStartDate, rEndDate, minPlayerAge, maxPlayerAge, teams);
+				
+				// attempt to save details to file
+				boolean saved = saveFile(t, name);
+				
+				// give user feedback
+				if(saved)				
+					JOptionPane.showMessageDialog(this, "Tournament Created!");
+				else
+					JOptionPane.showMessageDialog(this, "Something went wrong!");
+				
+				// reset all fields to default values
+				tName.setText("");
+				tStartDate.getJFormattedTextField().setText("");
+				tEndDate.getJFormattedTextField().setText("");
+				regStartDate.getJFormattedTextField().setText("");
+				regEndDate.getJFormattedTextField().setText("");
+				minAge.setValue(10);
+				maxAge.setValue(20);
+				numTeams.setValue(2);
+				formatDiv.setSelected(true);
+			}
 		}
-		else if (text_field_registration_SD.getDate().compareTo(Calendar.getInstance().getTime()) < 0) {
-			errorMsg("Date before today.");
-		}
-		
-		
-		return false;
 	}
 	
-	private void errorMsg(String message) {
-        JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.INFORMATION_MESSAGE);
+	/**
+	 * This method attempts to save a tournament to a file.
+	 * 
+	 * @param t The tournament
+	 * @param fileName The name of the file
+	 * @return A flag indicating success or failure to save the file
+	 */
+	public boolean saveFile(Tournament t, String fileName)
+	{
+		Document dom;
+		Element e = null;
+		
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+		try
+		{
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			dom = db.newDocument();
+			
+			// create root node
+			Element root = dom.createElement("tournament");
+			
+			// create and append child nodes to the root node
+			e = dom.createElement("name");
+			e.appendChild(dom.createTextNode(t.getName()));
+			root.appendChild(e);
+			
+			e = dom.createElement("type");
+			e.appendChild(dom.createTextNode(t.getType()));
+			root.appendChild(e);
+			
+			e = dom.createElement("numTeams");
+			e.appendChild(dom.createTextNode("" + t.getNumTeams()));
+			root.appendChild(e);
+			
+			e = dom.createElement("regStartDate");
+			e.appendChild(dom.createTextNode(t.getRegStartDate().toString()));
+			root.appendChild(e);
+			
+			e = dom.createElement("regEndDate");
+			e.appendChild(dom.createTextNode(t.getRegEndDate().toString()));
+			root.appendChild(e);
+			
+			e = dom.createElement("startDate");
+			e.appendChild(dom.createTextNode(t.getStartDate().toString()));
+			root.appendChild(e);
+			
+			e = dom.createElement("endDate");
+			e.appendChild(dom.createTextNode(t.getStartDate().toString()));
+			root.appendChild(e);
+			
+			e = dom.createElement("minPlayerAge");
+			e.appendChild(dom.createTextNode("" + t.getMinAge()));
+			root.appendChild(e);
+			
+			e = dom.createElement("maxPlayerAge");
+			e.appendChild(dom.createTextNode("" + t.getMaxAge()));
+			root.appendChild(e);
+			
+			// append root node to document
+			dom.appendChild(root);
+			
+			try
+			{
+				// add properties to file and format it
+				Transformer tr = TransformerFactory.newInstance().newTransformer();
+				tr.setOutputProperty(OutputKeys.INDENT, "yes");
+				tr.setOutputProperty(OutputKeys.METHOD, "xml");
+				tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+				tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "tournament.dtd");
+				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+				
+				// configure save path of current file
+				fileName = "src/tournaments/" + fileName + ".xml";
+				
+				// save name of each file created in a certain text file for reading later
+				BufferedWriter bw = null;
+				try
+				{
+					// set writer to append names to file
+					bw = new BufferedWriter(new FileWriter("src/tournaments/files.txt", true));
+					bw.write(fileName);	// append current file name
+					bw.newLine();		// create new line for next entry
+					bw.flush();			// write to file
+				}
+				catch(IOException ioe)
+				{
+					ioe.printStackTrace();
+				}
+				finally		// close file after done writing
+				{
+					if(bw != null)
+					{
+						try
+						{
+							bw.close();
+						}
+						catch(IOException ioe2)
+						{
+							ioe2.printStackTrace();
+						}
+					}
+				}
+				
+				// save file
+				tr.transform(new DOMSource(dom), new StreamResult(new FileOutputStream(fileName)));
+				return true;
+			}
+			catch(TransformerException te)
+			{
+				System.out.println(te.getMessage());
+				return false;
+			}
+			catch(IOException ioe)
+			{
+				System.out.println(ioe.getMessage());
+				return false;
+			}
+		}
+		catch(ParserConfigurationException pce)
+		{
+			System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
+			return false;
+		}
 	}
 }

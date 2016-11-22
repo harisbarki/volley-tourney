@@ -1,0 +1,2 @@
+src/tournaments/tourney.xml
+src/tournaments/tourney2.xml

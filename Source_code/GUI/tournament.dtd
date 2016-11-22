@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tournament
+[
+<!ELEMENT tournament (name,type,numTeams,regStartDate,regEndDate,startDate,endDate,minPlayerAge,maxPlayerAge)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
+<!ELEMENT numTeams (#PCDATA)>
+<!ELEMENT regEndDate (#PCDATA)>
+<!ELEMENT regStartDate (#PCDATA)>
+<!ELEMENT startDate (#PCDATA)>
+<!ELEMENT endDate (#PCDATA)>
+<!ELEMENT minPlayerAge (#PCDATA)>
+<!ELEMENT maxPLayerAge (#PCDATA)>
+]>
