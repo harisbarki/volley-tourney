@@ -129,6 +129,7 @@ public class MainMenu extends JFrame
 			public void actionPerformed(ActionEvent event)
 			{
 				CreateTournament c = new CreateTournament();
+				c.setVisible(true);
 				dispose();
 			}
 		});

@@ -171,21 +171,4 @@ public class RegisterTeam extends JFrame {
 		contentPane.add(lblTournament);
 	
 	}
-	
-	/**
-	 * Test Frame
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegisterTeam frame = new RegisterTeam();
-					frame.setTitle("Register Team");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 }

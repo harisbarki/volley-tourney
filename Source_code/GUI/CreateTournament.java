@@ -301,9 +301,6 @@ public class CreateTournament extends JFrame implements ActionListener
 		// set border and add main panel to frame
 		mainPanel.setBorder(new EmptyBorder(30,0,30,0));
 		add(mainPanel, BorderLayout.NORTH);
-		
-		// display frame
-		setVisible(true);
 	}
 	
 	/**
