@@ -81,7 +81,11 @@ public class MainMenu extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event) 
 			{
-		        JOptionPane.showMessageDialog(null, "Register Team clicked", "Success", JOptionPane.INFORMATION_MESSAGE);
+//		        JOptionPane.showMessageDialog(null, "Register Team clicked", "Success", JOptionPane.INFORMATION_MESSAGE);
+				RegisterTeam r = new RegisterTeam();
+				r.setTitle("Register Team");
+				r.setVisible(true);
+				dispose();
 			}
 		});
 				
