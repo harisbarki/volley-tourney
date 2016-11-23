@@ -5,8 +5,8 @@
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT numTeams (#PCDATA)>
-<!ELEMENT regEndDate (#PCDATA)>
 <!ELEMENT regStartDate (#PCDATA)>
+<!ELEMENT regEndDate (#PCDATA)>
 <!ELEMENT startDate (#PCDATA)>
 <!ELEMENT endDate (#PCDATA)>
 <!ELEMENT minPlayerAge (#PCDATA)>
