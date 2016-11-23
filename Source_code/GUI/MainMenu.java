@@ -102,6 +102,9 @@ public class MainMenu extends JFrame
 		if(tournaments.isEmpty())
 		{
 			model.addElement("N/A");
+			btnRegisterTeam.setEnabled(false);
+			btnSetMatches.setEnabled(false);
+			btnSetSchedules.setEnabled(false);
 		}
 		else
 		{
@@ -135,7 +138,9 @@ public class MainMenu extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event) 
 			{
-		        JOptionPane.showMessageDialog(null, "Register Team clicked", "Success", JOptionPane.INFORMATION_MESSAGE);
+		        RegisterTeam r = new RegisterTeam();
+		        r.setVisible(true);
+		        dispose();
 			}
 		});
 		
