@@ -32,6 +32,9 @@ public class RegisterTeam extends JFrame {
 	private ArrayList<Player> players;
 	
 	private MenuBar menuBar;
+
+	private final int WIDTH  = 550;
+	private final int HEIGHT = 400;
 	
 	/**
 	 * Create the frame.
@@ -39,7 +42,8 @@ public class RegisterTeam extends JFrame {
 	public RegisterTeam() {
 		setTitle("Register team");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 454, 374);
+//		setBounds(100, 100, 454, 374);
+		setSize(WIDTH, HEIGHT);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
