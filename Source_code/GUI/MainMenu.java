@@ -184,12 +184,14 @@ public class MainMenu extends JFrame
 	{	
 		String line = null;
 		ArrayList<Tournament> tournaments = new ArrayList<Tournament>();
-			
+		
+		BufferedReader br;
+		
 		try
 		{
 			// open file for reading
 			FileInputStream fis = new FileInputStream(tournamentFile);
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+			br = new BufferedReader(new InputStreamReader(fis));
 			
 			// attempt to read from file
 			while((line = br.readLine()) != null)
@@ -201,7 +203,8 @@ public class MainMenu extends JFrame
 				Tournament t = getTournament(line);
 				tournaments.add(t);
 			}
-			
+
+			br.close();
 			return tournaments;
 		}
 		catch(IOException ioe)
