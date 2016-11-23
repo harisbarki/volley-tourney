@@ -98,10 +98,17 @@ public class MainMenu extends JFrame
 				
 		// create string list model
 		DefaultListModel<String> model = new DefaultListModel<String>();
-				
-		// add tournament names to model
-		for(Tournament t : tournaments)
-			model.addElement(t.getName());
+		
+		if(tournaments.isEmpty())
+		{
+			model.addElement("N/A");
+		}
+		else
+		{
+			// add tournament names to model
+			for(Tournament t : tournaments)
+				model.addElement(t.getName());
+		}
 			
 		// initialize list with model
 		tournamentList = new JList<String>(model);
