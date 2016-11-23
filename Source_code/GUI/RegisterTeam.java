@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.EventQueue;
+import java.awt.MenuBar;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,6 +31,8 @@ public class RegisterTeam extends JFrame {
 	private JTextField txtPlayerAge;
 	private ArrayList<Player> players;
 	
+	private MenuBar menuBar;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -41,6 +44,13 @@ public class RegisterTeam extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		
+		// Getting the Top Menu and initializing it in this pane
+		TopMenu tm = new TopMenu(this);
+		menuBar = tm.getMenuBar();
+		setMenuBar(menuBar);
+		tm.initializeMenuBar(menuBar);
 
 		txtTeamName = new JTextField();
 		txtTeamName.setBounds(101, 27, 313, 19);
