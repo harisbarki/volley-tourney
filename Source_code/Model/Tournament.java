@@ -9,6 +9,7 @@ import java.util.ArrayList;
 */
 public class Tournament 
 {
+	private int id;
 	private ArrayList<Team> teams;
 	private ArrayList<Team> topTeams;
 	private Schedule schedule;
@@ -22,10 +23,13 @@ public class Tournament
 	private int maxPlayerAge;
 	private int numTeams;
 	private final int minimumTeamSize = 6;
-	
+    private static int counter = 1;	// To get how many classes are instantiated
+
 	// constructor creates a tournament	
 	public Tournament(String name, String type, LocalDate tournamentStart, LocalDate tournamentEnd, LocalDate registrationStart, LocalDate registrationEnd, int minPlayerAge, int maxPlayerAge, int numTeams) 
 	{
+		this.id = counter;
+		counter++;
 		this.name = name;
 		this.type = type;
 		this.tournamentStart = tournamentStart;
@@ -38,6 +42,10 @@ public class Tournament
 	}
 	
 	// accessors
+	public int getId(){
+		return id;
+	}
+	
 	public String getName()
 	{	
 		return name;
