@@ -45,7 +45,7 @@ public class RegisterTeam extends JFrame {
 	 */
 //	public RegisterTeam(Tournament tourney) {
 	public RegisterTeam() {
-		setTitle("Register team");
+		setTitle("Register Team");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setBounds(100, 100, 454, 374);
 		setSize(WIDTH, HEIGHT);
