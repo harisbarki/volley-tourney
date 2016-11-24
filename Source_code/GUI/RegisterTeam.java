@@ -5,8 +5,11 @@ import java.awt.MenuBar;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -32,6 +35,7 @@ public class RegisterTeam extends JFrame {
 	private ArrayList<Player> players;
 	
 	private MenuBar menuBar;
+	private Tournament tournament;
 
 	private final int WIDTH  = 550;
 	private final int HEIGHT = 400;
@@ -39,6 +43,7 @@ public class RegisterTeam extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+//	public RegisterTeam(Tournament tourney) {
 	public RegisterTeam() {
 		setTitle("Register team");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,12 +62,12 @@ public class RegisterTeam extends JFrame {
 		tm.initializeMenuBar(menuBar);
 
 		txtTeamName = new JTextField();
-		txtTeamName.setBounds(101, 27, 313, 19);
+		txtTeamName.setBounds(120, 27, 313, 19);
 		contentPane.add(txtTeamName);
 		txtTeamName.setColumns(10);
 
 		JLabel lblTeamName = new JLabel("Team Name:");
-		lblTeamName.setBounds(14, 30, 85, 15);
+		lblTeamName.setBounds(14, 30, 150, 15);
 		contentPane.add(lblTeamName);
 
 		JLabel lblPlayerDetails = new JLabel("Player Details");
@@ -82,21 +87,26 @@ public class RegisterTeam extends JFrame {
 		lblPlayerAge.setBounds(14, 166, 70, 15);
 		contentPane.add(lblPlayerAge);
 
-		txtPlayerAge = new JTextField();
-		txtPlayerAge.setBounds(101, 163, 114, 19);
-		contentPane.add(txtPlayerAge);
-		txtPlayerAge.setColumns(10);
-
-		JComboBox cmbTournament = new JComboBox();
-		cmbTournament.setBounds(101, 57, 313, 24);		
-		contentPane.add(cmbTournament);
+		JSpinner selectAge = new JSpinner(new SpinnerNumberModel(10,0,100,1));
+		selectAge.setSize(40, 25);
+		selectAge.setLocation(101, 166);
+		contentPane.add(selectAge);
 		
-		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent arg0) {
-				//ADD TOURNAMENTS TO COMBO BOX
-				players = new ArrayList<Player>();
-			}
-		});
+//		txtPlayerAge = new JTextField();
+//		txtPlayerAge.setBounds(101, 163, 114, 19);
+//		contentPane.add(txtPlayerAge);
+//		txtPlayerAge.setColumns(10);
+
+//		JComboBox cmbTournament = new JComboBox();
+//		cmbTournament.setBounds(101, 57, 313, 24);		
+//		contentPane.add(cmbTournament);
+//		
+//		addWindowListener(new WindowAdapter() {
+//			public void windowOpened(WindowEvent arg0) {
+//				//ADD TOURNAMENTS TO COMBO BOX
+//				players = new ArrayList<Player>();
+//			}
+//		});
 		
 		JButton btnRegisterTeam = new JButton("Register Team");
 		btnRegisterTeam.addMouseListener(new MouseAdapter() {
@@ -108,14 +118,14 @@ public class RegisterTeam extends JFrame {
 				for (Player p : players) {
 					team.addPlayer(p);
 				}
-				String tournamentName = cmbTournament.getSelectedItem().toString();
+//				String tournamentName = cmbTournament.getSelectedItem().toString();
 				
 				//Loop through list of tournaments to find correct one
 				//Try to add team to tournament 
 				
 			}
 		});
-		btnRegisterTeam.setBounds(14, 301, 121, 23);
+		btnRegisterTeam.setBounds(14, 301, 150, 23);
 		contentPane.add(btnRegisterTeam);
 		
 		JList<String> lstPlayers = new JList<String>();
@@ -144,7 +154,7 @@ public class RegisterTeam extends JFrame {
 				txtPlayerAge.setText("");
 			}
 		});
-		btnAddPlayer.setBounds(101, 194, 114, 23);
+		btnAddPlayer.setBounds(101, 200, 114, 23);
 		contentPane.add(btnAddPlayer);
 		
 		JButton btnRemovePlayer = new JButton("Remove Player");
@@ -167,8 +177,19 @@ public class RegisterTeam extends JFrame {
 		contentPane.add(btnRemovePlayer);
 		
 		JLabel lblTournament = new JLabel("Tournament:");
-		lblTournament.setBounds(14, 62, 85, 14);
+		lblTournament.setBounds(14, 62, 150, 14);
 		contentPane.add(lblTournament);
+
+//		JLabel tournamentLbl = new JLabel(tourney.getName());
+		JLabel tmntLbl = new JLabel("a tourney demo");
+		tmntLbl.setBounds(120, 62, 500, 15);
+		contentPane.add(tmntLbl);
 	
+	}
+	
+	public static void main(String[] args)
+	{
+		RegisterTeam rt = new RegisterTeam();
+		rt.setVisible(true);
 	}
 }
