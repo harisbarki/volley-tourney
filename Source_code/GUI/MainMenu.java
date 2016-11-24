@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -38,7 +39,6 @@ public class MainMenu extends JFrame
 {
 	private final int WIDTH  = 500;
 	private final int HEIGHT = 350;
-	private final String tournamentFile = "src/tournaments/files.txt";
 	
 	private MenuBar menuBar;
 	private JButton btnCreateTournament;
@@ -46,9 +46,16 @@ public class MainMenu extends JFrame
 	private JButton btnSetSchedules;
 	private JButton btnSetMatches;
 	private JList<String> tournamentList;
+	static ArrayList<Tournament> tournaments;
 	
 	public MainMenu()
 	{
+		createMainMenu();
+	}
+	
+	public MainMenu(ArrayList<Tournament> tournaments)
+	{
+		this.tournaments = tournaments;
 		createMainMenu();
 	}
 	
@@ -92,9 +99,6 @@ public class MainMenu extends JFrame
 		btnRegisterTeam.setPreferredSize(dim);
 		btnSetSchedules.setPreferredSize(dim);
 		btnSetMatches.setPreferredSize(dim);
-		
-		// retrieve list of tournaments
-		ArrayList<Tournament> tournaments = getTournaments();
 				
 		// create string list model
 		DefaultListModel<String> model = new DefaultListModel<String>();
@@ -110,12 +114,11 @@ public class MainMenu extends JFrame
 		{
 			// add tournament names to model
 			for(Tournament t : tournaments)
-				model.addElement(t.getName());
+				model.addElement(t.getId() + " " + t.getName());
 		}
 			
 		// initialize list with model
 		tournamentList = new JList<String>(model);
-				
 		// create scroll pane
 		JScrollPane scrollPane = new JScrollPane(tournamentList);
 		Dimension d = tournamentList.getPreferredSize();
@@ -139,8 +142,13 @@ public class MainMenu extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event) 
 			{
+				String selectedTournamentName = tournamentList.getSelectedValue();
+				Scanner s = new Scanner(selectedTournamentName);
+				int selectedTournamentId = s.nextInt();
+				Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
 		        RegisterTeam r = new RegisterTeam();
 		        r.setVisible(true);
+		        s.close();
 		        dispose();
 			}
 		});
@@ -179,135 +187,5 @@ public class MainMenu extends JFrame
 		
 		// display frame
 		setVisible(true);
-	}
-	
-	/**
-	 * This method returns a list of saved tournaments.
-	 * 
-	 * @return The list of saved tournaments
-	 */
-	public ArrayList<Tournament> getTournaments()
-	{	
-		String line = null;
-		ArrayList<Tournament> tournaments = new ArrayList<Tournament>();
-		
-		BufferedReader br;
-		
-		try
-		{
-			// open file for reading
-			FileInputStream fis = new FileInputStream(tournamentFile);
-			br = new BufferedReader(new InputStreamReader(fis));
-			
-			// attempt to read from file
-			while((line = br.readLine()) != null)
-			{
-				// skip blank line
-				if(line == "") continue;
-				
-				// get tournament from file
-				Tournament t = getTournament(line);
-				tournaments.add(t);
-			}
-
-			br.close();
-			return tournaments;
-		}
-		catch(IOException ioe)
-		{
-			ioe.printStackTrace();
-			return tournaments;
-		}
-	}
-	
-	/**
-	 * This method returns a tournament from the file.
-	 * 
-	 * @param name The tournament file name
-	 * @return A saved tournament
-	 */
-	public Tournament getTournament(String name)
-	{
-		// tournament object to return
-		Tournament t = null;
-		
-		// variables to store data from file
-		String tName, tType; 
-		int numTeams, minAge, maxAge;
-		LocalDate regSD, regED, tSD, tED;
-		
-		// xml document for to load file
-		Document dom;
-		
-		// for building document builder
-		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
-		
-		try
-		{
-			// create document using document builder
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			
-			// load the xml file
-			dom = db.parse(name);
-			
-			// get root element
-			Element root = dom.getDocumentElement();
-			
-			// for parsing the dates
-			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			
-			// get child nodes
-			tName = getTextValue(root, "name");
-			tType = getTextValue(root, "type");
-			numTeams = Integer.parseInt(getTextValue(root, "numTeams"));
-			regSD = LocalDate.parse(getTextValue(root, "regStartDate"), df);
-			regED = LocalDate.parse(getTextValue(root, "regStartDate"), df);
-			tSD = LocalDate.parse(getTextValue(root, "regStartDate"), df);
-			tED = LocalDate.parse(getTextValue(root, "regEndDate"), df);
-			minAge = Integer.parseInt(getTextValue(root, "minPlayerAge"));
-			maxAge = Integer.parseInt(getTextValue(root, "maxPlayerAge"));
-			
-			// create and return tournament
-			t = new Tournament(tName, tType, tSD, tED, regSD, regED, minAge, maxAge, numTeams);
-			return t;
-		}
-		catch(ParserConfigurationException pce)
-		{
-            System.out.println(pce.getMessage());
-            return t;
-        }
-		catch(SAXException se)
-		{
-            System.out.println(se.getMessage());
-            return t;
-        }
-		catch(IOException ioe)
-		{
-            System.err.println(ioe.getMessage());
-            return t;
-        }
-	}
-	
-	/**
-	 * This method retrieves the text node at the 
-	 * specified child node.
-	 * 
-	 * @param doc The parent node
-	 * @param tag The child node
-	 * @return The text node value of the child node
-	 */
-	private String getTextValue(Element root, String child)
-	{
-	    String value = "";
-	    
-	    NodeList nl;
-	    nl = root.getElementsByTagName(child);
-	    
-	    if (nl.getLength() > 0 && nl.item(0).hasChildNodes())
-	    {
-	        value = nl.item(0).getFirstChild().getNodeValue();
-	    }
-	    
-	    return value;
 	}
 }
