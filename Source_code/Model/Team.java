@@ -1,6 +1,6 @@
 package Model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /* 
  * Stores data for each team
@@ -8,10 +8,11 @@ import java.util.List;
 public class Team {
 	
 	private String name;
-	private List<Player> players;
+	private ArrayList<Player> players;
 
 	public Team(String name) {
 		this.name = name;
+		players = new ArrayList<Player>();
 	}
 
 	//Method to add player to team
@@ -29,7 +30,7 @@ public class Team {
 	}
 	
 	//Getter for list of players
-	public List<Player> getPlayers() {
+	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 	
