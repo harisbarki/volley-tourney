@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import java.util.ArrayList;
 
 public class RegisterTeam extends JFrame {
@@ -95,18 +96,28 @@ public class RegisterTeam extends JFrame {
 		JButton btnRegisterTeam = new JButton("Register Team");
 		btnRegisterTeam.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
-				
-				String name = txtTeamName.getText();
-				Team team = new Team(name);
-				
-				for (Player p : players) {
-					team.addPlayer(p);
+				String teamName;
+				try {
+					teamName = txtTeamName.getText();
+//					System.out.println(teamName);
+//					Team team;
+					
+					if (teamName.equals(""))     throw new NullPointerException();
+					if (players.size() == 0)     throw new IllegalStateException();
+					else {
+						Team team = new Team(teamName);
+						for (Player p : players) team.addPlayer(p);
+//						tourney.addTeam(team);				
+					}	
 				}
-//				String tournamentName = cmbTournament.getSelectedItem().toString();
-				
-				//Loop through list of tournaments to find correct one
-				//Try to add team to tournament 
-				
+				catch(IllegalStateException i) {
+					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				catch(NullPointerException n) {
+					n.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+//				txtTeamName.setText("");
 			}
 		});
 		btnRegisterTeam.setBounds(14, 350, 150, 23);
@@ -127,7 +138,7 @@ public class RegisterTeam extends JFrame {
 					age = (int) selectAge.getValue();
 					name  = txtPlayerName.getText();
 					
-					if(name.equals("") || !name.matches("[a-zA-Z]+") ) { // validate input
+					if(name.equals("") || !name.matches("[a-zA-Z\\s]+") ) {
 						throw new NullPointerException();
 					}
 					else {
@@ -136,7 +147,7 @@ public class RegisterTeam extends JFrame {
 						model.addElement(name + " : " + age);
 					}
 				}
-				catch (NullPointerException ex) {
+				catch (NullPointerException ex) { // validate input
 					JOptionPane.showMessageDialog(null, "Please enter a valid name for each player", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				finally {
@@ -151,7 +162,6 @@ public class RegisterTeam extends JFrame {
 		JButton btnRemovePlayer = new JButton("Remove Player");
 		btnRemovePlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				String player;
 				try {
 					if(lstPlayers.getModel().getSize() == 0) throw new IndexOutOfBoundsException();
@@ -160,16 +170,14 @@ public class RegisterTeam extends JFrame {
 					for (Player p : players) 
 						if (p.getName() == player) players.remove(p);
 
-					model.remove(lstPlayers.getSelectedIndex());
-					
+					model.remove(lstPlayers.getSelectedIndex());					
 				}
-				catch(IndexOutOfBoundsException n) {
+				catch(IndexOutOfBoundsException n) { // handle empty list
 					JOptionPane.showMessageDialog(null, "There are no players to remove", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				catch(NullPointerException n) {
+				catch(NullPointerException n) { // handle no player selected
 					JOptionPane.showMessageDialog(null, "Please select a player to remove", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				
 			}
 		});
 		btnRemovePlayer.setBounds(340, 301, 186, 23);
@@ -179,7 +187,7 @@ public class RegisterTeam extends JFrame {
 		lblTournament.setBounds(14, 62, 150, 14);
 		contentPane.add(lblTournament);
 
-//		JLabel tournamentLbl = new JLabel(tourney.getName());
+//		JLabel tmntLbl = new JLabel(tourney.getName());
 		JLabel tmntLbl = new JLabel("a very tourney demo");
 		tmntLbl.setBounds(120, 62, 500, 15);
 		contentPane.add(tmntLbl);
