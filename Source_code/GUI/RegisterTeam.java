@@ -35,7 +35,7 @@ public class RegisterTeam extends JFrame {
 	private ArrayList<Player> players;
 	
 	private MenuBar menuBar;
-	private Tournament tournament;
+//	private Tournament tournament;
 
 	private final int WIDTH  = 550;
 	private final int HEIGHT = 430;
@@ -43,8 +43,8 @@ public class RegisterTeam extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-//	public RegisterTeam(Tournament tourney) {
-	public RegisterTeam() {
+	public RegisterTeam(Tournament tourney) {
+//	public RegisterTeam() {
 		setTitle("Register Team");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
@@ -92,36 +92,6 @@ public class RegisterTeam extends JFrame {
 		contentPane.add(selectAge);
 		
 		players = new ArrayList<Player>();
-				
-		JButton btnRegisterTeam = new JButton("Register Team");
-		btnRegisterTeam.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent arg0) {
-				String teamName;
-				try {
-					teamName = txtTeamName.getText();
-//					System.out.println(teamName);
-//					Team team;
-					
-					if (teamName.equals(""))     throw new NullPointerException();
-					if (players.size() == 0)     throw new IllegalStateException();
-					else {
-						Team team = new Team(teamName);
-						for (Player p : players) team.addPlayer(p);
-//						tourney.addTeam(team);				
-					}	
-				}
-				catch(IllegalStateException i) {
-					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-				catch(NullPointerException n) {
-					n.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
-				}
-//				txtTeamName.setText("");
-			}
-		});
-		btnRegisterTeam.setBounds(14, 350, 150, 23);
-		contentPane.add(btnRegisterTeam);
 		
 		JList<String> lstPlayers = new JList<String>();
 		lstPlayers.setBounds(340, 107, 186, 169);
@@ -159,6 +129,34 @@ public class RegisterTeam extends JFrame {
 		btnAddPlayer.setBounds(101, 200, 114, 23);
 		contentPane.add(btnAddPlayer);
 		
+		JButton btnRegisterTeam = new JButton("Register Team");
+		btnRegisterTeam.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent arg0) {
+				String teamName;
+				try {
+					teamName = txtTeamName.getText();
+					
+					if (teamName.equals(""))     throw new NullPointerException();
+					if (players.size() == 0)     throw new IllegalStateException();
+					else {
+						Team team = new Team(teamName);
+						for (Player p : players) team.addPlayer(p);
+//						tourney.addTeam(team);				
+					}	
+				}
+				catch(IllegalStateException i) {
+					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				txtTeamName.setText("");
+				model.removeAllElements();
+			}
+		});
+		btnRegisterTeam.setBounds(14, 350, 150, 23);
+		contentPane.add(btnRegisterTeam);
+		
 		JButton btnRemovePlayer = new JButton("Remove Player");
 		btnRemovePlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -187,16 +185,16 @@ public class RegisterTeam extends JFrame {
 		lblTournament.setBounds(14, 62, 150, 14);
 		contentPane.add(lblTournament);
 
-//		JLabel tmntLbl = new JLabel(tourney.getName());
-		JLabel tmntLbl = new JLabel("a very tourney demo");
+		JLabel tmntLbl = new JLabel(tourney.getName());
+//		JLabel tmntLbl = new JLabel("a very tourney demo");
 		tmntLbl.setBounds(120, 62, 500, 15);
 		contentPane.add(tmntLbl);
 	
 	}
 	
-	public static void main(String[] args)
-	{
-		RegisterTeam rt = new RegisterTeam();
-		rt.setVisible(true);
-	}
+//	public static void main(String[] args)
+//	{
+//		RegisterTeam rt = new RegisterTeam();
+//		rt.setVisible(true);
+//	}
 }

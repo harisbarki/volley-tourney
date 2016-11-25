@@ -146,7 +146,7 @@ public class MainMenu extends JFrame
 				Scanner s = new Scanner(selectedTournamentName);
 				int selectedTournamentId = s.nextInt();
 				Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
-		        RegisterTeam r = new RegisterTeam();
+		        RegisterTeam r = new RegisterTeam(selectedTournament);
 		        r.setVisible(true);
 		        s.close();
 		        dispose();
