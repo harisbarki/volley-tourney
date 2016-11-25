@@ -20,7 +20,7 @@ import GUI.*;
 
 public class Program {
 	
-	private final String tournamentFile = "src/tournaments/files.txt";
+	private final String tournamentFile = "tournaments/files.txt";
 	static ArrayList<Tournament> tournaments;
 
 	/**

@@ -39,6 +39,9 @@ public class Tournament
 		this.minPlayerAge = minPlayerAge;
 		this.maxPlayerAge = maxPlayerAge;
 		this.numTeams = numTeams;
+
+		teams = new ArrayList<Team>();
+		topTeams = new ArrayList<Team>();
 	}
 	
 	// accessors
@@ -123,6 +126,29 @@ public class Tournament
 		return true;
 	}
 	
+	// method to add and check validity of team to the tournament
+	public void addTopTeam(Team team)
+	{
+		if (teams.contains(team))
+			topTeams.add(team);
+	}
+	
+//	// method to add and check validity of team to the tournament
+//		public void addTeam(Team team)
+//		{
+//			if (team.size() < minimumTeamSize) 
+//				System.out.println("Team size is lower than minimum limit");
+////				return false;
+//			
+//			for (Player p : team.getPlayers()) 
+//				if (p.getAge() < minPlayerAge && p.getAge() > maxPlayerAge) 
+//					System.out.println(p.getName() + " is younger than the age limit");
+////					return false;
+//			
+//			teams.add(team);
+////			return true;
+//		}
+	
 	// method to remove team from tournament
 	public boolean removeTeam(Team team)
 	{
@@ -133,17 +159,22 @@ public class Tournament
 		return false;
 	}
 	
-	// method to add and check validity of team to the tournament
-	public void addTopTeam(Team team)
-	{
-		if (teams.contains(team))
-			topTeams.add(team);
-	}
-	
 	// to create the schedule after registration has ended 
 	public void createSchedule()
 	{
 		schedule = new Schedule();
 		schedule.generateSchedule(teams, topTeams, type);
+	}
+	
+	// display registered teams in the tournament
+	public String showTeams()
+	{
+		return teams.toString();
+	}
+	
+	// display top ranked teams in the tournament
+	public String showTopTeams()
+	{
+		return topTeams.toString();
 	}
 }
