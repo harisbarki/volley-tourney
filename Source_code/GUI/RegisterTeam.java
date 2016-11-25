@@ -141,13 +141,21 @@ public class RegisterTeam extends JFrame {
 					else {
 						Team team = new Team(teamName);
 						for (Player p : players) team.addPlayer(p);
-//						tourney.addTeam(team);				
+						if(tourney.addTeam(team)) {
+							System.out.print(tourney.getName() + ": " + tourney.showTeams());
+							JOptionPane.showMessageDialog(null, teamName+" has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Please add more players to the team", "Not enough players", JOptionPane.ERROR_MESSAGE);
+						}
+												
 					}	
 				}
 				catch(IllegalStateException i) {
 					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				catch(NullPointerException n) {
+					n.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				txtTeamName.setText("");

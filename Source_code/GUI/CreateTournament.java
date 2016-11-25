@@ -426,14 +426,14 @@ public class CreateTournament extends JFrame implements ActionListener
 					regEndDateErr.setVisible(true);
 				}
 				
-				JOptionPane.showMessageDialog(this, "Start date cannot be after than end date!");
+				JOptionPane.showMessageDialog(null, "Start date cannot be after than end date!", "Error", JOptionPane.ERROR_MESSAGE);
 				valid = false;
 			}
 			else
 			{
 				if(rEndDate.compareTo(startDate) > 0)
 				{
-					JOptionPane.showMessageDialog(this, "Registration should end before tournament begins!");
+					JOptionPane.showMessageDialog(null, "Registration should end before tournament begins!", "Error", JOptionPane.ERROR_MESSAGE);
 					regEndDateErr.setVisible(true);
 					valid = false;
 				}				
@@ -548,14 +548,14 @@ public class CreateTournament extends JFrame implements ActionListener
 				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 				
 				// configure save path of current file
-				fileName = "src/tournaments/" + fileName + ".xml";
+				fileName = "../tournaments/" + fileName + ".xml";
 				
 				// save name of each file created in a certain text file for reading later
 				BufferedWriter bw = null;
 				try
 				{
 					// set writer to append names to file
-					bw = new BufferedWriter(new FileWriter("src/tournaments/files.txt", true));
+					bw = new BufferedWriter(new FileWriter("../tournaments/files.txt", true));
 					bw.write(fileName);	// append current file name
 					bw.newLine();		// create new line for next entry
 					bw.flush();			// write to file

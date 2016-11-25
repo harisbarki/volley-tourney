@@ -142,14 +142,18 @@ public class MainMenu extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent event) 
 			{
-				String selectedTournamentName = tournamentList.getSelectedValue();
-				Scanner s = new Scanner(selectedTournamentName);
-				int selectedTournamentId = s.nextInt();
-				Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
-		        RegisterTeam r = new RegisterTeam(selectedTournament);
-		        r.setVisible(true);
-		        s.close();
-		        dispose();
+				try {
+					String selectedTournamentName = tournamentList.getSelectedValue();
+					Scanner s = new Scanner(selectedTournamentName);
+					int selectedTournamentId = s.nextInt();
+					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
+			        RegisterTeam r = new RegisterTeam(selectedTournament);
+			        r.setVisible(true);
+			        s.close();
+			        dispose();
+				} catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null,  "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		
