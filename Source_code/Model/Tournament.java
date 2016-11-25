@@ -94,6 +94,12 @@ public class Tournament
 		return numTeams;
 	}
 	
+	// mutator
+	public void setID(int newID)
+	{
+		id = newID;
+	}
+	
 	// returns whether a the registration is still in progress
 	public boolean canRegister()
 	{

@@ -38,4 +38,9 @@ public class Team {
 	public int size() {
 		return players.size();
 	}
+	
+	public String toString()
+	{
+		return "Name: " + this.name + ", Players: " + this.players.toString();
+	}
 }

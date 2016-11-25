@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!ELEMENT tournament (name,type,numTeams,regStartDate,regEndDate,startDate,endDate,minPlayerAge,maxPlayerAge)>
+<!ELEMENT id (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT numTeams (#PCDATA)>

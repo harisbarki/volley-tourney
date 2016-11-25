@@ -22,4 +22,9 @@ public class Player {
 	public int getAge() {
 		return age;
 	}
+	
+	public String toString()
+	{
+		return "[Name = " + this.name + ", Age = " + this.age + "]";
+	}
 }

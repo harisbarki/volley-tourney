@@ -1,2 +1,1 @@
-tournaments/tourney.xml
-tournaments/tourney2.xml
+tournaments/Tournament.xml
