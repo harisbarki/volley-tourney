@@ -46,7 +46,6 @@ public class RegisterTeam extends JFrame {
 	public RegisterTeam() {
 		setTitle("Register Team");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setBounds(100, 100, 454, 374);
 		setSize(WIDTH, HEIGHT);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -128,7 +127,7 @@ public class RegisterTeam extends JFrame {
 					age = (int) selectAge.getValue();
 					name  = txtPlayerName.getText();
 					
-					if(name.equals("") || !name.matches("[a-zA-Z]+") ) {
+					if(name.equals("") || !name.matches("[a-zA-Z]+") ) { // validate input
 						throw new NullPointerException();
 					}
 					else {
@@ -138,12 +137,12 @@ public class RegisterTeam extends JFrame {
 					}
 				}
 				catch (NullPointerException ex) {
-					JOptionPane.showMessageDialog(null, "Please enter a valid name for the player", "Error", JOptionPane.ERROR_MESSAGE);
-					txtPlayerName.setText("");
-					selectAge.setValue(10);
+					JOptionPane.showMessageDialog(null, "Please enter a valid name for each player", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				txtPlayerName.setText("");
-				selectAge.setValue(10);
+				finally {
+					txtPlayerName.setText("");
+					selectAge.setValue(10);					
+				}
 			}
 		});
 		btnAddPlayer.setBounds(101, 200, 114, 23);
@@ -153,15 +152,23 @@ public class RegisterTeam extends JFrame {
 		btnRemovePlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				String name = lstPlayers.getSelectedValue();
-				name = name.substring(0, name.indexOf(':') - 1);
-				
-				for (Player p : players) 
-					if (p.getName() == name)
-						players.remove(p);
-				
-				
-				model.remove(lstPlayers.getSelectedIndex());
+				String player;
+				try {
+					if(lstPlayers.getModel().getSize() == 0) throw new IndexOutOfBoundsException();
+					player = lstPlayers.getSelectedValue();
+					player = player.substring(0, player.indexOf(':') - 1);
+					for (Player p : players) 
+						if (p.getName() == player) players.remove(p);
+
+					model.remove(lstPlayers.getSelectedIndex());
+					
+				}
+				catch(IndexOutOfBoundsException n) {
+					JOptionPane.showMessageDialog(null, "There are no players to remove", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please select a player to remove", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 				
 			}
 		});
@@ -173,7 +180,7 @@ public class RegisterTeam extends JFrame {
 		contentPane.add(lblTournament);
 
 //		JLabel tournamentLbl = new JLabel(tourney.getName());
-		JLabel tmntLbl = new JLabel("a tourney demo");
+		JLabel tmntLbl = new JLabel("a very tourney demo");
 		tmntLbl.setBounds(120, 62, 500, 15);
 		contentPane.add(tmntLbl);
 	
