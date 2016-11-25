@@ -31,14 +31,13 @@ public class RegisterTeam extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtTeamName;
 	private JTextField txtPlayerName;
-	private JTextField txtPlayerAge;
 	private ArrayList<Player> players;
 	
 	private MenuBar menuBar;
 	private Tournament tournament;
 
 	private final int WIDTH  = 550;
-	private final int HEIGHT = 400;
+	private final int HEIGHT = 430;
 	
 	/**
 	 * Create the frame.
@@ -53,7 +52,7 @@ public class RegisterTeam extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+		setResizable(false);		
 		
 		// Getting the Top Menu and initializing it in this pane
 		TopMenu tm = new TopMenu(this);
@@ -92,22 +91,8 @@ public class RegisterTeam extends JFrame {
 		selectAge.setLocation(101, 166);
 		contentPane.add(selectAge);
 		
-//		txtPlayerAge = new JTextField();
-//		txtPlayerAge.setBounds(101, 163, 114, 19);
-//		contentPane.add(txtPlayerAge);
-//		txtPlayerAge.setColumns(10);
-
-//		JComboBox cmbTournament = new JComboBox();
-//		cmbTournament.setBounds(101, 57, 313, 24);		
-//		contentPane.add(cmbTournament);
-//		
-//		addWindowListener(new WindowAdapter() {
-//			public void windowOpened(WindowEvent arg0) {
-//				//ADD TOURNAMENTS TO COMBO BOX
-//				players = new ArrayList<Player>();
-//			}
-//		});
-		
+		players = new ArrayList<Player>();
+				
 		JButton btnRegisterTeam = new JButton("Register Team");
 		btnRegisterTeam.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
@@ -125,11 +110,11 @@ public class RegisterTeam extends JFrame {
 				
 			}
 		});
-		btnRegisterTeam.setBounds(14, 301, 150, 23);
+		btnRegisterTeam.setBounds(14, 350, 150, 23);
 		contentPane.add(btnRegisterTeam);
 		
 		JList<String> lstPlayers = new JList<String>();
-		lstPlayers.setBounds(228, 107, 186, 169);
+		lstPlayers.setBounds(340, 107, 186, 169);
 		contentPane.add(lstPlayers);
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		lstPlayers.setModel(model);
@@ -137,21 +122,28 @@ public class RegisterTeam extends JFrame {
 		JButton btnAddPlayer = new JButton("Add Player");
 		btnAddPlayer.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				String name = txtPlayerName.getText();
-				int age = 0;
+				String name;
+				int age;
 				try {
-					age = Integer.parseInt(txtPlayerAge.getText());
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(null, "Please enter valid player information", "Error", JOptionPane.ERROR_MESSAGE);
-					txtPlayerName.setText("");
-					txtPlayerAge.setText("");
-					return;
+					age = (int) selectAge.getValue();
+					name  = txtPlayerName.getText();
+					
+					if(name.equals("") || !name.matches("[a-zA-Z]+") ) {
+						throw new NullPointerException();
+					}
+					else {
+						Player p = new 	Player(name, age);
+						players.add(p);
+						model.addElement(name + " : " + age);
+					}
 				}
-				Player p = new 	Player(name, age);
-				players.add(p);
-				model.addElement(name + " : " + age);
+				catch (NullPointerException ex) {
+					JOptionPane.showMessageDialog(null, "Please enter a valid name for the player", "Error", JOptionPane.ERROR_MESSAGE);
+					txtPlayerName.setText("");
+					selectAge.setValue(10);
+				}
 				txtPlayerName.setText("");
-				txtPlayerAge.setText("");
+				selectAge.setValue(10);
 			}
 		});
 		btnAddPlayer.setBounds(101, 200, 114, 23);
@@ -173,7 +165,7 @@ public class RegisterTeam extends JFrame {
 				
 			}
 		});
-		btnRemovePlayer.setBounds(228, 301, 186, 23);
+		btnRemovePlayer.setBounds(340, 301, 186, 23);
 		contentPane.add(btnRemovePlayer);
 		
 		JLabel lblTournament = new JLabel("Tournament:");
