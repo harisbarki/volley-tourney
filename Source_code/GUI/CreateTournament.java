@@ -50,6 +50,7 @@ public class CreateTournament extends JFrame implements ActionListener
 	// instance variables
 	private final int WIDTH  = 550;
 	private final int HEIGHT = 600;
+	private final String tournamentFile = "src/tournaments/files.txt";
 
 	private JLabel tNameLbl;
 	private JLabel tStartDateLbl;
@@ -552,14 +553,14 @@ public class CreateTournament extends JFrame implements ActionListener
 				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 				
 				// configure save path of current file
-				fileName = "tournaments/" + fileName + ".xml";
+				fileName = "src/tournaments/" + fileName + ".xml";
 				
 				// save name of each file created in a certain text file for reading later
 				BufferedWriter bw = null;
 				try
 				{
 					// set writer to append names to file
-					bw = new BufferedWriter(new FileWriter("tournaments/files.txt", true));
+					bw = new BufferedWriter(new FileWriter(tournamentFile, true));
 					bw.write(fileName);	// append current file name
 					bw.newLine();		// create new line for next entry
 					bw.flush();			// write to file
