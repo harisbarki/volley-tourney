@@ -1,2 +1,2 @@
-src/tournaments/test.xml
+tournaments/test.xml
 

@@ -48,7 +48,7 @@ public class MainMenu extends JFrame
 	private JList<String> tournamentList;
 	private ArrayList<Tournament> tournaments;
 	
-	private final String tournamentFile = "src/tournaments/files.txt";
+	private final String tournamentFile = "tournaments/files.txt";
 	
 	public MainMenu()
 	{

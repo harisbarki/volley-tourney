@@ -50,7 +50,7 @@ public class CreateTournament extends JFrame implements ActionListener
 	// instance variables
 	private final int WIDTH  = 550;
 	private final int HEIGHT = 600;
-	private final String tournamentFile = "src/tournaments/files.txt";
+	private final String tournamentFile = "tournaments/files.txt";
 
 	private JLabel tNameLbl;
 	private JLabel tStartDateLbl;
@@ -553,7 +553,7 @@ public class CreateTournament extends JFrame implements ActionListener
 				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 				
 				// configure save path of current file
-				fileName = "src/tournaments/" + fileName + ".xml";
+				fileName = "tournaments/" + fileName + ".xml";
 				
 				// save name of each file created in a certain text file for reading later
 				BufferedWriter bw = null;
