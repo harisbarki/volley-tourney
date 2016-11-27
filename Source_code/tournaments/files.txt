@@ -1,1 +1,2 @@
 tournaments/Tournament.xml
+tournaments/tourney.xml

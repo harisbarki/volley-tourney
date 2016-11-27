@@ -5,8 +5,8 @@ import java.util.ArrayList;
 /* 
  * Stores data for each team
 */
-public class Team {
-	
+public class Team
+{	
 	private String name;
 	private ArrayList<Player> players;
 

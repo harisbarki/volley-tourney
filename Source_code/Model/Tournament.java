@@ -183,4 +183,9 @@ public class Tournament
 	{
 		return topTeams.toString();
 	}
+	
+	public ArrayList<Team> getTeams()
+	{
+		return teams;
+	}
 }

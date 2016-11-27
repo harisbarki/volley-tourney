@@ -7,6 +7,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -24,7 +39,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class RegisterTeam extends JFrame {
@@ -143,6 +163,7 @@ public class RegisterTeam extends JFrame {
 						for (Player p : players) team.addPlayer(p);
 						if(tourney.addTeam(team)) {
 							System.out.print(tourney.getName() + ": " + tourney.showTeams());
+							saveTeam(tourney.getName(),team);
 							JOptionPane.showMessageDialog(null, teamName+" has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
@@ -199,9 +220,81 @@ public class RegisterTeam extends JFrame {
 	
 	}
 	
-//	public static void main(String[] args)
-//	{
-//		RegisterTeam rt = new RegisterTeam();
-//		rt.setVisible(true);
-//	}
+	public void saveTeam(String name, Team t)
+	{	
+		// get name for retrieving save file
+		String fileName = "tournaments/" + name + ".xml";
+		
+		// xml document for to load file
+		Document dom;
+				
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+				
+		try
+		{
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+					
+			// load the xml file
+			dom = db.parse(fileName);
+			
+			// get root element
+			Element root = dom.getDocumentElement();
+			NodeList teamList = root.getElementsByTagName("teamList");
+			Element tl = (Element) teamList.item(0);
+			Element team = dom.createElement("team");
+			
+			ArrayList<Player> players = t.getPlayers();
+			
+			// for each player create node and append name and age for each
+			for(int i = 0; i < players.size(); i++)
+			{
+				Element p = dom.createElement("player");
+				Element n = dom.createElement("name");
+				Element a = dom.createElement("age");
+					
+				n.appendChild(dom.createTextNode(players.get(i).getName()));
+				a.appendChild(dom.createTextNode("" + players.get(i).getAge()));
+				p.appendChild(n);
+				p.appendChild(a);
+				team.appendChild(p);
+			}
+			tl.appendChild(team);
+			
+			try
+			{
+				// add properties to file and format it
+				Transformer tr = TransformerFactory.newInstance().newTransformer();
+				tr.setOutputProperty(OutputKeys.INDENT, "yes");
+				tr.setOutputProperty(OutputKeys.METHOD, "xml");
+				tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+				tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "tournament.dtd");
+				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+				
+				// save file
+				tr.transform(new DOMSource(dom), new StreamResult(new FileOutputStream(fileName)));
+			}
+			catch(TransformerException te)
+			{
+				System.out.println(te.getMessage());
+			}
+			catch(IOException ioe)
+			{
+				System.out.println(ioe.getMessage());
+			}
+		}
+		catch(ParserConfigurationException pce)
+		{
+			System.out.println(pce.getMessage());
+		}
+		catch(SAXException se)
+		{
+            System.out.println(se.getMessage());
+        }
+		catch(IOException ioe)
+		{
+			System.out.println(ioe.getMessage());
+		}
+	}
 }

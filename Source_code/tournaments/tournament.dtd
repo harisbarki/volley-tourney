@@ -10,3 +10,7 @@
 <!ELEMENT endDate (#PCDATA)>
 <!ELEMENT minPlayerAge (#PCDATA)>
 <!ELEMENT maxPLayerAge (#PCDATA)>
+<!ELEMENT teamList (team)>
+<!ELEMENT team (player,age)>
+<!ELEMENT player (name,age)>
+<!ELEMENT age (#PCDATA)>
