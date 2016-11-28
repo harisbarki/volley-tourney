@@ -41,6 +41,6 @@ public class Team
 	
 	public String toString()
 	{
-		return "Name: " + this.name + ", Players: " + this.players.toString();
+		return "Team Name: " + this.name + ", Players: " + this.players.toString();
 	}
 }
