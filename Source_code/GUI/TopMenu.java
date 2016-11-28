@@ -52,7 +52,14 @@ public class TopMenu extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent event) 
 			{
-		        JOptionPane.showMessageDialog(null, "Please create the tournament from Main Menu.", "Help", JOptionPane.INFORMATION_MESSAGE);
+		        if(rootFrame instanceof MainMenu) 
+		        {
+		        	JOptionPane.showMessageDialog(null, "Please create the tournament from Main Menu.", "Help", JOptionPane.INFORMATION_MESSAGE);
+		        }
+		        else if(rootFrame instanceof RegisterTeam)
+		        {
+		        	JOptionPane.showMessageDialog(null, "Please create a team to be added to the tournament", "Help", JOptionPane.INFORMATION_MESSAGE);
+		        }
 			}
 		});
 		mnNewMenu.add(mntmHelp);
