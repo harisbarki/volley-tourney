@@ -60,6 +60,10 @@ public class TopMenu extends JFrame {
 		        {
 		        	JOptionPane.showMessageDialog(null, "Please create a team to be added to the tournament", "Help", JOptionPane.INFORMATION_MESSAGE);
 		        }
+		        else if(rootFrame instanceof CreateTournament)
+		        {
+		        	JOptionPane.showMessageDialog(null, "Please enter details of the tournament", "Help", JOptionPane.INFORMATION_MESSAGE);
+		        }
 			}
 		});
 		mnNewMenu.add(mntmHelp);
