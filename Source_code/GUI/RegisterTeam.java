@@ -164,12 +164,11 @@ public class RegisterTeam extends JFrame {
 						if(tourney.addTeam(team)) {
 							System.out.print(tourney.getName() + ": " + tourney.showTeams());
 							saveTeam(tourney.getName(),team);
-							JOptionPane.showMessageDialog(null, teamName+" has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "Please add more players to the team", "Not enough players", JOptionPane.ERROR_MESSAGE);
-						}
-												
+						}							
 					}	
 				}
 				catch(IllegalStateException i) {
@@ -178,8 +177,6 @@ public class RegisterTeam extends JFrame {
 				catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				txtTeamName.setText("");
-				model.removeAllElements();
 			}
 		});
 		btnRegisterTeam.setBounds(14, 350, 150, 23);
@@ -242,9 +239,13 @@ public class RegisterTeam extends JFrame {
 			// get root element
 			Element root = dom.getDocumentElement();
 			NodeList teamList = root.getElementsByTagName("teamList");
+			
 			Element tl = (Element) teamList.item(0);
 			Element team = dom.createElement("team");
-			
+		
+			team.appendChild(dom.createTextNode(t.getName()));
+				
+
 			ArrayList<Player> players = t.getPlayers();
 			
 			// for each player create node and append name and age for each
