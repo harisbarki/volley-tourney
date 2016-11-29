@@ -7,12 +7,18 @@ import java.util.ArrayList;
 */
 public class Team
 {	
+	int id;
 	private String name;
 	private ArrayList<Player> players;
 
 	public Team(String name) {
 		this.name = name;
 		players = new ArrayList<Player>();
+	}
+	
+	
+	public String getName() {
+		return name;
 	}
 
 	//Method to add player to team
