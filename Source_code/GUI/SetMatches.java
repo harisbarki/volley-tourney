@@ -247,7 +247,7 @@ public class SetMatches extends JFrame {
 				NodeList child = root.getElementsByTagName("teamList");
 				
 				
-				teamName = getTextValue(child, root, "team");
+				teamName = getTextValue(child, root, "teamName");
 				t = new Team(teamName);
 				return t;
 				

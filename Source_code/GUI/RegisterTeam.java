@@ -243,7 +243,9 @@ public class RegisterTeam extends JFrame {
 			Element tl = (Element) teamList.item(0);
 			Element team = dom.createElement("team");
 		
-			team.appendChild(dom.createTextNode(t.getName()));
+			Element s = dom.createElement("teamName");
+			s.appendChild(dom.createTextNode(t.getName()));
+			team.appendChild(s);
 				
 
 			ArrayList<Player> players = t.getPlayers();

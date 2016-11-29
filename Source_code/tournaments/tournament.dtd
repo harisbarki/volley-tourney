@@ -12,5 +12,6 @@
 <!ELEMENT maxPLayerAge (#PCDATA)>
 <!ELEMENT teamList (team)>
 <!ELEMENT team (player,age)>
+<!ELEMENT teamName (#PCDATA)>
 <!ELEMENT player (name,age)>
 <!ELEMENT age (#PCDATA)>
