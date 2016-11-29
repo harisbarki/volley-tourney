@@ -155,6 +155,24 @@ public class MainMenu extends JFrame
 			}
 		});
 		
+		//handle click event for set matches
+		btnSetMatches.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					String selectedTournamentName = tournamentList.getSelectedValue();
+					Scanner s = new Scanner(selectedTournamentName);
+					int selectedTournamentId = s.nextInt();
+					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
+					SetMatches r = new SetMatches(selectedTournament);
+					r.setVisible(true);
+					s.close();
+					dispose();
+				} catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null,  "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		
 		// arrange components and add to main panel
 		gbc.insets = new Insets(30,10,10,10);
 		
