@@ -19,12 +19,14 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -41,6 +43,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 
@@ -54,15 +57,16 @@ public class SetMatches extends JFrame {
 	private MenuBar menuBar;
 	private JButton btnSetMatches;
 	private JButton btnAddRanking;
+	private JButton btnRemoveRank;
+	
 	private JList<String> teamList;
 	private JList<String> seedingList;
 	
-	private ArrayList<Team> teams;
-	private ArrayList<Team> seedings;
+	private List<Team> teams;
+
 
 	public SetMatches(Tournament tourney) {
 		
-
 		//setting frame properties
 		setTitle("Set Matches");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,6 +91,7 @@ public class SetMatches extends JFrame {
 		//buttons
 		btnSetMatches = new JButton("Set Matches");
 		btnAddRanking = new JButton("Add Rank");
+		btnRemoveRank = new JButton("Remove Rank");
 		
 		
 		//size of buttons
@@ -95,46 +100,94 @@ public class SetMatches extends JFrame {
 		
 		teams = getTeams(tourney);
 		
-		// create string list model
-		DefaultListModel<String> model = new DefaultListModel<String>();
+		// create string list model for list of teams
+		DefaultListModel<String> teamModel = new DefaultListModel<String>();
 		
 		if (teams.isEmpty())
 		{
-			model.addElement("No teams registered");
+			teamModel.addElement("No teams registered");
 			btnSetMatches.setEnabled(false);
+			btnAddRanking.setEnabled(false);
+			btnRemoveRank.setEnabled(false);
 		}
 		else
 		{
 			// add team names to model
 			for (Team t : teams)
-				model.addElement(t.getName());
+				teamModel.addElement(t.getName());
 		}
 		
 //		initialize team list with model
-		teamList = new JList<String>(model);
+		teamList = new JList<String>(teamModel);
+		
+//		create string list model for seeded teams
+		DefaultListModel<String> rankModel = new DefaultListModel<String>();	
+		//initialize seeding list with model
+		seedingList = new JList<String>(rankModel);
+		
 		
 //		create scroll pane for list of teams
 		JScrollPane teamScrollPane = new JScrollPane(teamList);
-		Dimension scrollSize = teamList.getPreferredSize();
-		scrollSize.width = 150;
-		scrollSize.height = 156;
-		teamScrollPane.setPreferredSize(scrollSize);
+		Dimension teamScrollSize = teamList.getPreferredSize();
+		teamScrollSize.width = 150;
+		teamScrollSize.height = 156;
+		teamScrollPane.setPreferredSize(teamScrollSize);
 		
 //		create scroll pane for ranking of teams
-		JScrollPane rankScrollPane = new JScrollPane(teamList);
-		rankScrollPane.setPreferredSize(scrollSize);
+		JScrollPane rankScrollPane = new JScrollPane(seedingList);
+		Dimension rankScrollSize = seedingList.getPreferredSize();
+		rankScrollSize.width = 150;
+		rankScrollSize.height = 156;
+		rankScrollPane.setPreferredSize(rankScrollSize);
 		
 // handle click event for add ranking
 		
-//		btnAddRanking.addActionListener(new ActionListener() {
-//			
-//			public void actionPerformed(ActionEvent event)
-//			{
-//				try {
-//					
-//				}
-//			}
-//		});
+		btnAddRanking.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent event)
+			{
+				try {
+					String selectedTeamName = teamList.getSelectedValue();
+					Team selectedTeam = getATeam(selectedTeamName);
+					
+						if (!tourney.showTopTeams().contains(selectedTeam)) 
+						{
+						tourney.addRank(selectedTeam);
+						rankModel.addElement(selectedTeam.getName());
+						System.out.println(tourney.showTopTeams());
+						System.out.println(tourney.showTeams());
+						}
+						else throw new IllegalStateException();
+					
+				}
+				 catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				catch(IllegalStateException m) {
+					JOptionPane.showMessageDialog(null, "Team already seeded", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+		});
+		
+// handle click event for remove rank
+		
+		btnRemoveRank.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event) 
+			{
+			try {
+				String selectedTeamName = seedingList.getSelectedValue();
+				Team selectedTeam = getATeam(selectedTeamName);
+				rankModel.removeElement(selectedTeamName);
+				tourney.removeRank(selectedTeam);
+				System.out.println(tourney.showTopTeams());
+				}
+			catch(NullPointerException n) {
+				JOptionPane.showMessageDialog(null,"Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		
 		
 		
@@ -159,6 +212,10 @@ public class SetMatches extends JFrame {
 		gbc.gridy = 0;
 		mainPanel.add(btnAddRanking, gbc);
 		
+		gbc.gridx = 3;
+		gbc.gridy = -2;
+		mainPanel.add(btnRemoveRank, gbc);
+		
 		gbc.gridx = 5;
 		gbc.gridy = 3;
 		mainPanel.add(btnSetMatches,gbc);
@@ -167,13 +224,13 @@ public class SetMatches extends JFrame {
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
 		gbc.gridheight = 3;
-		mainPanel.add(rankScrollPane, gbc);
+		mainPanel.add(teamScrollPane, gbc);
 		
 		gbc.gridx = 4;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
 		gbc.gridheight = 3;
-		mainPanel.add(teamScrollPane, gbc);
+		mainPanel.add(rankScrollPane, gbc);
 		
 		//set border and add main panel to frame
 		mainPanel.setBorder(new EmptyBorder(20,0,20,0));
@@ -184,20 +241,21 @@ public class SetMatches extends JFrame {
 	}
 	
 	
-	public ArrayList<Team> getTeams(Tournament tourney)
+	public List<Team> getTeams(Tournament tourney)
 	{	
 		String line = null;
 		teams = new ArrayList<Team>();
-//		String tournamentFile = ("tournaments/" + tourney.getName() +".xml" );
-		String tournamentFile = "tournaments/files.txt";
+		String tournamentFile = ("tournaments/" + tourney.getName() +".xml" );
+		String file = "tournaments/files.txt";
 		
 		BufferedReader br;
 		
 		try
 		{
 			// open file for reading
-			FileInputStream fis = new FileInputStream(tournamentFile);
+			FileInputStream fis = new FileInputStream(file);
 			br = new BufferedReader(new InputStreamReader(fis));
+			
 			
 			// attempt to read from file
 			while((line = br.readLine()) != null)
@@ -205,11 +263,10 @@ public class SetMatches extends JFrame {
 				// skip blank line
 				if(line == "") continue;
 				
-				// get teams from file
-				Team t = getTeam(line);
-				teams.add(t);
-			}
 
+				// get teams from file
+				teams = getTeamFrom(tournamentFile);
+			}
 			br.close();
 			return teams;
 		}
@@ -220,10 +277,11 @@ public class SetMatches extends JFrame {
 		}
 	}
 		
-		public Team getTeam(String name)
+		public ArrayList<Team> getTeamFrom(String name)
 		{
 			// tournament object to return
 			Team t = null;
+			ArrayList<Team> tempTeam = new ArrayList<Team>();
 			
 			// variables to store data from file
 			String teamName = null;
@@ -243,30 +301,40 @@ public class SetMatches extends JFrame {
 				dom = db.parse(name);
 							
 				// get root element
-				Element root = dom.getDocumentElement();
-				NodeList child = root.getElementsByTagName("teamList");
+				NodeList child = dom.getElementsByTagName("team");
 				
+				for (int i = 0; i < child.getLength(); i++)
+				{
+					
+				Node temp = child.item(i);
 				
-				teamName = getTextValue(child, root, "teamName");
+				//	retrieves all the team names
+				if (temp.getNodeType() == Node.ELEMENT_NODE)
+					{
+				Element newRoot = (Element) temp;
+				teamName = getTextValue(child, newRoot, "teamName");
 				t = new Team(teamName);
-				return t;
+				tempTeam.add(t);
+					}
+				}
+				return tempTeam;
 				
 				
 			}
 			catch(ParserConfigurationException pce)
 			{
 	            System.out.println(pce.getMessage());
-	            return t;
+	            return tempTeam;
 	        }
 			catch(SAXException se)
 			{
 	            System.out.println(se.getMessage());
-	            return t;
+	            return tempTeam;
 	        }
 			catch(IOException ioe)
 			{
 	            System.err.println(ioe.getMessage());
-	            return t;
+	            return tempTeam;
 	        }
 		}
 		
@@ -278,19 +346,42 @@ public class SetMatches extends JFrame {
 		 * @param tag The child node
 		 * @return The text node value of the child node
 		 */
-		private String getTextValue(NodeList x, Element root, String child)
+		
+		private String getTextValue(NodeList node, Element root, String child)
 		{
 		    String value = "";
 		    
-		    x = root.getElementsByTagName(child);
+		    node = root.getElementsByTagName(child);
 		    
-		    if (x.getLength() > 0 && x.item(0).hasChildNodes())
+		    if (node.getLength() > 0 && node.item(0).hasChildNodes())
 		    {
-		        value = x.item(0).getFirstChild().getNodeValue();
+		        value = node.item(0).getFirstChild().getNodeValue();
 		    }
 		    
 		    return value;
 		}
+		
+		//gets a team object from a given team name.
+		private Team getATeam(String name) {
+			
+			Team team = null;
+			
+			for (int i = 0; i < teams.size(); i++) 
+			{
+				Team currentTeam = teams.get(i);
+				
+				if (currentTeam.getName() == name)
+				{
+					team = currentTeam;
+				}
+			}
+			return team;
+		}
+		
+		
+		
+		
+		
 	
 
 		

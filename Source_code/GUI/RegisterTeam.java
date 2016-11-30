@@ -155,7 +155,6 @@ public class RegisterTeam extends JFrame {
 				String teamName;
 				try {
 					teamName = txtTeamName.getText();
-					
 					if (teamName.equals(""))     throw new NullPointerException();
 					if (players.size() == 0)     throw new IllegalStateException();
 					else {
@@ -174,9 +173,9 @@ public class RegisterTeam extends JFrame {
 				catch(IllegalStateException i) {
 					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				catch(NullPointerException n) {
-					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
-				}
+//				catch(NullPointerException n) {
+//					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
+//				}
 			}
 		});
 		btnRegisterTeam.setBounds(14, 350, 150, 23);
@@ -192,7 +191,6 @@ public class RegisterTeam extends JFrame {
 					player = player.substring(0, player.indexOf(':') - 1);
 					for (Player p : players) 
 						if (p.getName() == player) players.remove(p);
-
 					model.remove(lstPlayers.getSelectedIndex());					
 				}
 				catch(IndexOutOfBoundsException n) { // handle empty list

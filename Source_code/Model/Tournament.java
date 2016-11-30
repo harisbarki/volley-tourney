@@ -2,6 +2,7 @@ package Model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * This class stores info for each tournament
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 public class Tournament 
 {
 	private int id;
-	private ArrayList<Team> teams;
-	private ArrayList<Team> topTeams;
+	private List<Team> teams;
+	private List<Team> seeding;
 	private Schedule schedule;
 	private String name;
 	private String type;
@@ -41,7 +42,7 @@ public class Tournament
 		this.numTeams = numTeams;
 
 		teams = new ArrayList<Team>();
-		topTeams = new ArrayList<Team>();
+		seeding = new ArrayList<Team>();
 	}
 	
 	// accessors
@@ -132,11 +133,30 @@ public class Tournament
 		return true;
 	}
 	
+//	public Team getATeam(String name) {
+//		int pos = 0;
+//		for (int i = 0; i < teams.size(); i++) 
+//		{
+//			if (teams.get(i).getName() == name) 
+//				pos = i;
+//			System.out.println(teams.get(i).getName());
+//
+//		}
+//		return teams.get(pos);
+//		
+//	}
+	
 	// method to add and check validity of team to the tournament
-	public void addTopTeam(Team team)
+	public void addRank(Team team)
 	{
-		if (teams.contains(team))
-			topTeams.add(team);
+//		if (teams.contains(team))
+			seeding.add(team);
+	}
+	
+	public void removeRank(Team team)
+	{
+//		if (seeding.contains(team))
+			seeding.remove(team);
 	}
 	
 //	// method to add and check validity of team to the tournament
@@ -169,7 +189,7 @@ public class Tournament
 	public void createSchedule()
 	{
 		schedule = new Schedule();
-		schedule.generateSchedule(teams, topTeams, type);
+		schedule.generateSchedule(teams, seeding, type);
 	}
 	
 	// display registered teams in the tournament
@@ -179,13 +199,15 @@ public class Tournament
 	}
 	
 	// display top ranked teams in the tournament
-	public String showTopTeams()
+	public List<Team> showTopTeams()
 	{
-		return topTeams.toString();
+		return seeding;
 	}
 	
-	public ArrayList<Team> getTeams()
+	public List<Team> getTeams()
 	{
 		return teams;
 	}
+	
+	
 }

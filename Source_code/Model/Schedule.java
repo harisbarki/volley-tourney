@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
  * This class generates and stores the brackets and matches for the tournament.
@@ -32,7 +33,7 @@ public class Schedule {
 	}
 
 	//Method to generate schedule based on the top teams selected and the type of tournament
-	public void generateSchedule(ArrayList<Team> teams, ArrayList<Team> topTeams, String type) {
+	public void generateSchedule(List<Team> teams, List<Team> seeding, String type) {
 		/*
 		 * Some algorithm dependant on topTeams and type 
 		 * which splits teams into certain brackets
