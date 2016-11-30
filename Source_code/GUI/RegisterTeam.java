@@ -178,9 +178,9 @@ public class RegisterTeam extends JFrame {
 				catch(IllegalStateException i) {
 					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-//				catch(NullPointerException n) {
-//					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
-//				}
+				catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnRegisterTeam.setBounds(14, 350, 150, 23);
