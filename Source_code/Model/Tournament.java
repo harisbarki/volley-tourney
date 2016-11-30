@@ -1,8 +1,22 @@
 package Model;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /*
  * This class stores info for each tournament
@@ -128,8 +142,9 @@ public class Tournament
 		for (Player p : team.getPlayers()) 
 			if (p.getAge() < minPlayerAge && p.getAge() > maxPlayerAge) 
 				return false;
+			else
+				teams.add(team);
 		
-		teams.add(team);
 		return true;
 	}
 	
@@ -149,14 +164,20 @@ public class Tournament
 	// method to add and check validity of team to the tournament
 	public void addRank(Team team)
 	{
-//		if (teams.contains(team))
+		if (teams.contains(team))
+		{
 			seeding.add(team);
+			if (seeding.contains(team)) team.setSeedingPos(seeding.indexOf(team));
+		}
 	}
 	
 	public void removeRank(Team team)
 	{
-//		if (seeding.contains(team))
+		if (seeding.contains(team)) 
+		{
 			seeding.remove(team);
+			team.setSeedingPos(-1);
+		}
 	}
 	
 //	// method to add and check validity of team to the tournament
@@ -204,10 +225,137 @@ public class Tournament
 		return seeding;
 	}
 	
+	//gets the list of teams in the tournament
 	public List<Team> getTeams()
-	{
-		return teams;
+	{	
+		String line = null;
+		String tournamentFile = ("tournaments/" + getName() +".xml" );
+		String file = "tournaments/files.txt";
+		
+		BufferedReader br;
+		
+		try
+		{
+			// open file for reading
+			FileInputStream fis = new FileInputStream(file);
+			br = new BufferedReader(new InputStreamReader(fis));
+			
+			
+			// attempt to read from file
+			while((line = br.readLine()) != null)
+			{
+				// skip blank line
+				if(line == "") continue;
+				
+
+				// get teams from file
+				teams = getTeamFrom(tournamentFile);
+			}
+			br.close();
+			return teams;
+		}
+		catch(IOException ioe)
+		{
+			ioe.printStackTrace();
+			return teams;
+		}
 	}
-	
+		
+	//gets the teams saved on the specific tournament file
+		public List<Team> getTeamFrom(String name)
+		{
+			// tournament object to return
+			Team t = null;
+			ArrayList<Team> tempTeam = new ArrayList<Team>();
+			
+			// variables to store data from file
+			String teamName = null;
+			
+			// xml document for to load file
+			Document dom;
+			
+			// for building document builder
+			DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+			
+			try
+			{
+				// create document using document builder
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				
+				// load the xml file
+				dom = db.parse(name);
+							
+				// get root element
+				NodeList child = dom.getElementsByTagName("team");
+				
+				for (int i = 0; i < child.getLength(); i++)
+				{
+					
+				Node temp = child.item(i);
+				
+				//	retrieves all the team names
+				if (temp.getNodeType() == Node.ELEMENT_NODE)
+					{
+				Element newRoot = (Element) temp;
+				teamName = getTextValue(child, newRoot, "teamName");
+				t = new Team(teamName);
+				tempTeam.add(t);
+					}
+				}
+				return tempTeam;
+				
+				
+			}
+			catch(ParserConfigurationException pce)
+			{
+	            System.out.println(pce.getMessage());
+	            return tempTeam;
+	        }
+			catch(SAXException se)
+			{
+	            System.out.println(se.getMessage());
+	            return tempTeam;
+	        }
+			catch(IOException ioe)
+			{
+	            System.err.println(ioe.getMessage());
+	            return tempTeam;
+	        }
+		}
+		
+		/**
+		 * This method retrieves the text node at the 
+		 * specified child node.
+		 * 
+		 * @param doc The parent node
+		 * @param tag The child node
+		 * @return The text node value of the child node
+		 */
+		
+		public String getTextValue(NodeList node, Element root, String child)
+		{
+		    String value = "";
+		    
+		    node = root.getElementsByTagName(child);
+		    
+		    if (node.getLength() > 0 && node.item(0).hasChildNodes())
+		    {
+		        value = node.item(0).getFirstChild().getNodeValue();
+		    }
+		    
+		    return value;
+		}
+		
+		//gets a team object from a given team name.
+		public Team getATeam(String name) {		
+			Team selectedTeam = null;
+			for (Team x : teams)
+				if (x.getName() == name) selectedTeam = x;
+			return selectedTeam;
+			
+		}
+		
+		
+		
 	
 }

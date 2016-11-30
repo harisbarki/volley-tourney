@@ -98,7 +98,7 @@ public class SetMatches extends JFrame {
 		Dimension buttonSize = new Dimension(150,25);
 		btnSetMatches.setPreferredSize(buttonSize);
 		
-		teams = getTeams(tourney);
+		teams = tourney.getTeams();
 		
 		// create string list model for list of teams
 		DefaultListModel<String> teamModel = new DefaultListModel<String>();
@@ -148,13 +148,16 @@ public class SetMatches extends JFrame {
 			{
 				try {
 					String selectedTeamName = teamList.getSelectedValue();
-					Team selectedTeam = getATeam(selectedTeamName);
+					Team selectedTeam = tourney.getATeam(selectedTeamName);
 					
-						if (!tourney.showTopTeams().contains(selectedTeam)) 
+						if (!selectedTeam.seeded()) 
 						{
 						tourney.addRank(selectedTeam);
 						rankModel.addElement(selectedTeam.getName());
+						teamModel.removeElement(selectedTeamName);
+						
 						System.out.println(tourney.showTopTeams());
+						System.out.println(selectedTeam.showSeedPos());
 						System.out.println(tourney.showTeams());
 						}
 						else throw new IllegalStateException();
@@ -178,10 +181,13 @@ public class SetMatches extends JFrame {
 			{
 			try {
 				String selectedTeamName = seedingList.getSelectedValue();
-				Team selectedTeam = getATeam(selectedTeamName);
+				Team selectedTeam = tourney.getATeam(selectedTeamName);
+				
 				rankModel.removeElement(selectedTeamName);
+				teamModel.addElement(selectedTeamName);
 				tourney.removeRank(selectedTeam);
 				System.out.println(tourney.showTopTeams());
+				
 				}
 			catch(NullPointerException n) {
 				JOptionPane.showMessageDialog(null,"Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
@@ -239,151 +245,8 @@ public class SetMatches extends JFrame {
 		//display frame
 		setVisible(true);
 	}
-	
-	
-	public List<Team> getTeams(Tournament tourney)
-	{	
-		String line = null;
-		teams = new ArrayList<Team>();
-		String tournamentFile = ("tournaments/" + tourney.getName() +".xml" );
-		String file = "tournaments/files.txt";
-		
-		BufferedReader br;
-		
-		try
-		{
-			// open file for reading
-			FileInputStream fis = new FileInputStream(file);
-			br = new BufferedReader(new InputStreamReader(fis));
-			
-			
-			// attempt to read from file
-			while((line = br.readLine()) != null)
-			{
-				// skip blank line
-				if(line == "") continue;
-				
 
-				// get teams from file
-				teams = getTeamFrom(tournamentFile);
-			}
-			br.close();
-			return teams;
-		}
-		catch(IOException ioe)
-		{
-			ioe.printStackTrace();
-			return teams;
-		}
-	}
-		
-		public ArrayList<Team> getTeamFrom(String name)
-		{
-			// tournament object to return
-			Team t = null;
-			ArrayList<Team> tempTeam = new ArrayList<Team>();
-			
-			// variables to store data from file
-			String teamName = null;
-			
-			// xml document for to load file
-			Document dom;
-			
-			// for building document builder
-			DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
-			
-			try
-			{
-				// create document using document builder
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				
-				// load the xml file
-				dom = db.parse(name);
-							
-				// get root element
-				NodeList child = dom.getElementsByTagName("team");
-				
-				for (int i = 0; i < child.getLength(); i++)
-				{
-					
-				Node temp = child.item(i);
-				
-				//	retrieves all the team names
-				if (temp.getNodeType() == Node.ELEMENT_NODE)
-					{
-				Element newRoot = (Element) temp;
-				teamName = getTextValue(child, newRoot, "teamName");
-				t = new Team(teamName);
-				tempTeam.add(t);
-					}
-				}
-				return tempTeam;
-				
-				
-			}
-			catch(ParserConfigurationException pce)
-			{
-	            System.out.println(pce.getMessage());
-	            return tempTeam;
-	        }
-			catch(SAXException se)
-			{
-	            System.out.println(se.getMessage());
-	            return tempTeam;
-	        }
-			catch(IOException ioe)
-			{
-	            System.err.println(ioe.getMessage());
-	            return tempTeam;
-	        }
-		}
-		
-		/**
-		 * This method retrieves the text node at the 
-		 * specified child node.
-		 * 
-		 * @param doc The parent node
-		 * @param tag The child node
-		 * @return The text node value of the child node
-		 */
-		
-		private String getTextValue(NodeList node, Element root, String child)
-		{
-		    String value = "";
-		    
-		    node = root.getElementsByTagName(child);
-		    
-		    if (node.getLength() > 0 && node.item(0).hasChildNodes())
-		    {
-		        value = node.item(0).getFirstChild().getNodeValue();
-		    }
-		    
-		    return value;
-		}
-		
-		//gets a team object from a given team name.
-		private Team getATeam(String name) {
-			
-			Team team = null;
-			
-			for (int i = 0; i < teams.size(); i++) 
-			{
-				Team currentTeam = teams.get(i);
-				
-				if (currentTeam.getName() == name)
-				{
-					team = currentTeam;
-				}
-			}
-			return team;
-		}
-		
-		
-		
-		
-		
-	
 
-		
-	}
+	
+}
 

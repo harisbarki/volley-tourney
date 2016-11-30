@@ -7,11 +7,12 @@ import java.util.ArrayList;
 */
 public class Team
 {	
-	int id;
+	private int seed;
 	private String name;
 	private ArrayList<Player> players;
 
 	public Team(String name) {
+		seed = -1;   //sets the default seeding position as -1 when not seeded
 		this.name = name;
 		players = new ArrayList<Player>();
 	}
@@ -19,6 +20,19 @@ public class Team
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void setSeedingPos(int s)	{
+		seed = s;
+	}
+	
+	public int showSeedPos() {
+		return seed;
+	}
+	
+	public boolean seeded() {
+		if (showSeedPos() == -1) return false;
+		else return true;
 	}
 
 	//Method to add player to team
