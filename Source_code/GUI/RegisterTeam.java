@@ -53,9 +53,12 @@ public class RegisterTeam extends JFrame {
 	private JTextField txtTeamName;
 	private JTextField txtPlayerName;
 	private ArrayList<Player> players;
+	private JList<String> lstPlayers;
+	private JSpinner selectAge;
+	private DefaultListModel<String> model;
 	
 	private MenuBar menuBar;
-//	private Tournament tournament;
+	private Tournament tournament;
 
 	private final int WIDTH  = 550;
 	private final int HEIGHT = 430;
@@ -73,6 +76,8 @@ public class RegisterTeam extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		setResizable(false);		
+		
+		this.tournament = tourney;
 		
 		// Getting the Top Menu and initializing it in this pane
 		TopMenu tm = new TopMenu(this);
@@ -106,17 +111,17 @@ public class RegisterTeam extends JFrame {
 		lblPlayerAge.setBounds(14, 166, 70, 15);
 		contentPane.add(lblPlayerAge);
 
-		JSpinner selectAge = new JSpinner(new SpinnerNumberModel(10,0,100,1));
+		selectAge = new JSpinner(new SpinnerNumberModel(10,0,100,1));
 		selectAge.setSize(40, 25);
 		selectAge.setLocation(101, 166);
 		contentPane.add(selectAge);
 		
 		players = new ArrayList<Player>();
 		
-		JList<String> lstPlayers = new JList<String>();
+		lstPlayers = new JList<String>();
 		lstPlayers.setBounds(340, 107, 186, 169);
 		contentPane.add(lstPlayers);
-		DefaultListModel<String> model = new DefaultListModel<String>();
+		model = new DefaultListModel<String>();
 		lstPlayers.setModel(model);
 		
 		JButton btnAddPlayer = new JButton("Add Player");
@@ -160,9 +165,9 @@ public class RegisterTeam extends JFrame {
 					else {
 						Team team = new Team(teamName);
 						for (Player p : players) team.addPlayer(p);
-						if(tourney.addTeam(team)) {
-							System.out.print(tourney.getName() + ": " + tourney.showTeams());
-							saveTeam(tourney.getName(),team);
+						if(tournament.addTeam(team)) {
+							System.out.print(tournament.getName() + ": " + tournament.showTeams());
+							saveTeam(tournament.getName(),team);
 							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {

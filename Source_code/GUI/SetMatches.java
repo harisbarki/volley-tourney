@@ -59,6 +59,11 @@ public class SetMatches extends JFrame {
 	private JButton btnAddRanking;
 	private JButton btnRemoveRank;
 	
+	private Tournament tournament;
+	
+	private DefaultListModel<String> rankModel;
+	private DefaultListModel<String> teamModel;
+	
 	private JList<String> teamList;
 	private JList<String> seedingList;
 	
@@ -72,6 +77,8 @@ public class SetMatches extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);	
+		
+		this.tournament = tourney;
 		
 		//Initializing top menu bar
 		TopMenu topMenu = new TopMenu(this);
@@ -101,7 +108,7 @@ public class SetMatches extends JFrame {
 		teams = tourney.getTeams();
 		
 		// create string list model for list of teams
-		DefaultListModel<String> teamModel = new DefaultListModel<String>();
+		teamModel = new DefaultListModel<String>();
 		
 		if (teams.isEmpty())
 		{
@@ -121,7 +128,7 @@ public class SetMatches extends JFrame {
 		teamList = new JList<String>(teamModel);
 		
 //		create string list model for seeded teams
-		DefaultListModel<String> rankModel = new DefaultListModel<String>();	
+		rankModel = new DefaultListModel<String>();	
 		//initialize seeding list with model
 		seedingList = new JList<String>(rankModel);
 		
@@ -148,17 +155,17 @@ public class SetMatches extends JFrame {
 			{
 				try {
 					String selectedTeamName = teamList.getSelectedValue();
-					Team selectedTeam = tourney.getATeam(selectedTeamName);
+					Team selectedTeam = tournament.getATeam(selectedTeamName);
 					
 						if (!selectedTeam.seeded()) 
 						{
-						tourney.addRank(selectedTeam);
+						tournament.addRank(selectedTeam);
 						rankModel.addElement(selectedTeam.getName());
 						teamModel.removeElement(selectedTeamName);
 						
-						System.out.println(tourney.showTopTeams());
+						System.out.println(tournament.showTopTeams());
 						System.out.println(selectedTeam.showSeedPos());
-						System.out.println(tourney.showTeams());
+						System.out.println(tournament.showTeams());
 						}
 						else throw new IllegalStateException();
 					
@@ -181,12 +188,12 @@ public class SetMatches extends JFrame {
 			{
 			try {
 				String selectedTeamName = seedingList.getSelectedValue();
-				Team selectedTeam = tourney.getATeam(selectedTeamName);
+				Team selectedTeam = tournament.getATeam(selectedTeamName);
 				
 				rankModel.removeElement(selectedTeamName);
 				teamModel.addElement(selectedTeamName);
-				tourney.removeRank(selectedTeam);
-				System.out.println(tourney.showTopTeams());
+				tournament.removeRank(selectedTeam);
+				System.out.println(tournament.showTopTeams());
 				
 				}
 			catch(NullPointerException n) {
