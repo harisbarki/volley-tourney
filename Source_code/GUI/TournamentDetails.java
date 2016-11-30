@@ -22,16 +22,13 @@ import Model.Tournament;
 
 public class TournamentDetails extends JPanel {
 	
-	private final int WIDTH = 500;
-	private final int HEIGHT = 430;
-	
 	private JButton btnEditTournament;
 	private JButton btnEditTeam;
 	
 	private Tournament tournament;
 	
 	private JList<String> teamList;
-	private JList<String> scheduleList;
+	
 	
 	private List<Team> teams;
 	
