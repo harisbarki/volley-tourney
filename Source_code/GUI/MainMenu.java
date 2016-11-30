@@ -43,8 +43,11 @@ public class MainMenu extends JFrame
 	private MenuBar menuBar;
 	private JButton btnCreateTournament;
 	private JButton btnRegisterTeam;
-	private JButton btnSetSchedules;
-	private JButton btnSetMatches;
+	private JButton btnSetSchedule;
+	private JButton btnViewSchedule;
+	private JButton btnTournamentDetails;
+	private JPanel mainPanel;
+	
 	private JList<String> tournamentList;
 	private ArrayList<Tournament> tournaments;
 	
@@ -75,7 +78,7 @@ public class MainMenu extends JFrame
 		tm.initializeMenuBar(menuBar);
 		
 		// create and format main panel
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		mainPanel.setSize(400,400);
 		
 		// set layout
@@ -87,14 +90,17 @@ public class MainMenu extends JFrame
 		// create components to add
 		btnCreateTournament = new JButton("Create Tournament");
 		btnRegisterTeam = new JButton("Register Team");
-		btnSetSchedules = new JButton("Set Schedules");
-		btnSetMatches = new JButton("Set Matches");
+		btnViewSchedule = new JButton("View Schedule");
+		btnSetSchedule = new JButton("Generate Schedule");
+		btnTournamentDetails = new JButton("Tournament Details");
+
 		
 		// set size of buttons
 		Dimension dim = new Dimension(150,25);
 		btnRegisterTeam.setPreferredSize(dim);
-		btnSetSchedules.setPreferredSize(dim);
-		btnSetMatches.setPreferredSize(dim);
+		btnViewSchedule.setPreferredSize(dim);
+		btnSetSchedule.setPreferredSize(dim);
+		btnTournamentDetails.setPreferredSize(dim);
 		
 		tournaments = getTournaments();
 				
@@ -105,8 +111,10 @@ public class MainMenu extends JFrame
 		{
 			model.addElement("N/A");
 			btnRegisterTeam.setEnabled(false);
-			btnSetMatches.setEnabled(false);
-			btnSetSchedules.setEnabled(false);
+			btnSetSchedule.setEnabled(false);
+			btnViewSchedule.setEnabled(false);
+			btnTournamentDetails.setEnabled(false);
+			
 		}
 		else
 		{
@@ -155,8 +163,8 @@ public class MainMenu extends JFrame
 			}
 		});
 		
-		//handle click event for set matches
-		btnSetMatches.addActionListener(new ActionListener() {
+		//handle click event for set schedule
+		btnSetSchedule.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
 					String selectedTournamentName = tournamentList.getSelectedValue();
@@ -173,8 +181,27 @@ public class MainMenu extends JFrame
 			}
 		});
 		
+		//handle click event for tournament details
+		btnTournamentDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					String selectedTournamentName = tournamentList.getSelectedValue();
+					Scanner s = new Scanner(selectedTournamentName);
+					int selectedTournamentId = s.nextInt();
+					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
+					TournamentDetails r = new TournamentDetails(selectedTournament);
+					mainPanel.setVisible(false);
+					add(r);
+					r.setVisible(true);
+					s.close();
+				} catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		
 		// arrange components and add to main panel
-		gbc.insets = new Insets(30,10,10,10);
+		gbc.insets = new Insets(10,10,10,10);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -184,7 +211,7 @@ public class MainMenu extends JFrame
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 1;
-		gbc.gridheight = 3;
+		gbc.gridheight = 4;
 		mainPanel.add(scrollPane, gbc);
 		
 		gbc.gridx = 1;
@@ -195,16 +222,20 @@ public class MainMenu extends JFrame
 			
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		mainPanel.add(btnSetMatches, gbc);
+		mainPanel.add(btnSetSchedule, gbc);
 		
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		mainPanel.add(btnSetSchedules, gbc);
+		mainPanel.add(btnViewSchedule, gbc);
+		
+		gbc.gridx = 1;
+		gbc.gridy = 4;
+		mainPanel.add(btnTournamentDetails, gbc);
 		
 		// set border and add main panel to frame
 		mainPanel.setBorder(new EmptyBorder(20,0,20,0));
 		add(mainPanel, BorderLayout.NORTH);
-		
+				
 		// display frame
 		setVisible(true);
 	}

@@ -55,9 +55,9 @@ public class SetMatches extends JFrame {
 	private final int HEIGHT = 430;
 	
 	private MenuBar menuBar;
-	private JButton btnSetMatches;
-	private JButton btnAddRanking;
-	private JButton btnRemoveRank;
+	private JButton btnCreateBracket;
+	private JButton btnSeedTeam;
+	private JButton btnRemoveSeed;
 	
 	private Tournament tournament;
 	
@@ -89,6 +89,7 @@ public class SetMatches extends JFrame {
 		//Main panel layout and format
 		JPanel mainPanel = new JPanel();
 		mainPanel.setSize(500,500);
+		
 		GridBagLayout layout = new GridBagLayout();
 		mainPanel.setLayout(layout);
 		
@@ -96,15 +97,15 @@ public class SetMatches extends JFrame {
 		gbc.anchor = GridBagConstraints.NORTH;
 		
 		//buttons
-		btnSetMatches = new JButton("Set Matches");
-		btnAddRanking = new JButton("Add Rank");
-		btnRemoveRank = new JButton("Remove Rank");
+		btnCreateBracket = new JButton("Create Bracket");
+		btnSeedTeam = new JButton("Seed Team");
+		btnRemoveSeed = new JButton("Remove Seed");
 		
 		
 		//size of buttons
 		Dimension buttonSize = new Dimension(150,25);
-		btnSetMatches.setPreferredSize(buttonSize);
-		
+		btnCreateBracket.setPreferredSize(buttonSize);
+
 		teams = tourney.getTeams();
 		
 		// create string list model for list of teams
@@ -113,9 +114,9 @@ public class SetMatches extends JFrame {
 		if (teams.isEmpty())
 		{
 			teamModel.addElement("No teams registered");
-			btnSetMatches.setEnabled(false);
-			btnAddRanking.setEnabled(false);
-			btnRemoveRank.setEnabled(false);
+			btnCreateBracket.setEnabled(false);
+			btnSeedTeam.setEnabled(false);
+			btnRemoveSeed.setEnabled(false);
 		}
 		else
 		{
@@ -149,7 +150,7 @@ public class SetMatches extends JFrame {
 		
 // handle click event for add ranking
 		
-		btnAddRanking.addActionListener(new ActionListener() {
+		btnSeedTeam.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent event)
 			{
@@ -182,7 +183,7 @@ public class SetMatches extends JFrame {
 		
 // handle click event for remove rank
 		
-		btnRemoveRank.addActionListener(new ActionListener()
+		btnRemoveSeed.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent event) 
 			{
@@ -219,19 +220,20 @@ public class SetMatches extends JFrame {
 //		});
 		
 		// arrange components and add to main panel
-		gbc.insets = new Insets(30,10,10,10);
+		gbc.insets = new Insets(10,10,10,10);
 		
-		gbc.gridx = 3;
+		
+		gbc.gridx = 4;
 		gbc.gridy = 0;
-		mainPanel.add(btnAddRanking, gbc);
+		mainPanel.add(btnSeedTeam, gbc);
 		
-		gbc.gridx = 3;
+		gbc.gridx = 4;
 		gbc.gridy = -2;
-		mainPanel.add(btnRemoveRank, gbc);
+		mainPanel.add(btnRemoveSeed, gbc);
 		
 		gbc.gridx = 5;
-		gbc.gridy = 3;
-		mainPanel.add(btnSetMatches,gbc);
+		gbc.gridy = 5;
+		mainPanel.add(btnCreateBracket,gbc);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -239,7 +241,7 @@ public class SetMatches extends JFrame {
 		gbc.gridheight = 3;
 		mainPanel.add(teamScrollPane, gbc);
 		
-		gbc.gridx = 4;
+		gbc.gridx = 5;
 		gbc.gridy = 0;
 		gbc.gridwidth = 2;
 		gbc.gridheight = 3;
