@@ -161,7 +161,7 @@ public class RegisterTeam extends JFrame {
 				try {
 					teamName = txtTeamName.getText();
 					if (teamName.equals(""))     throw new NullPointerException();
-					if (players.size() == 0)     throw new IllegalStateException();
+					if (players.size() < tournament.minimumTeamSize()) throw new IllegalStateException();
 					else {
 						Team team = new Team(teamName);
 						for (Player p : players) team.addPlayer(p);
@@ -171,12 +171,12 @@ public class RegisterTeam extends JFrame {
 							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
-							JOptionPane.showMessageDialog(null, "Please add more players to the team", "Not enough players", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Tournament is already full!", "Error", JOptionPane.ERROR_MESSAGE);
 						}							
 					}	
 				}
 				catch(IllegalStateException i) {
-					JOptionPane.showMessageDialog(null, "Please add players first", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Please add more players", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null, "Please set a name for the team", "Error", JOptionPane.ERROR_MESSAGE);
@@ -213,7 +213,7 @@ public class RegisterTeam extends JFrame {
 		lblTournament.setBounds(14, 62, 150, 14);
 		contentPane.add(lblTournament);
 
-		JLabel tmntLbl = new JLabel(tourney.getName());
+		JLabel tmntLbl = new JLabel(tournament.getName());
 //		JLabel tmntLbl = new JLabel("a very tourney demo");
 		tmntLbl.setBounds(120, 62, 500, 15);
 		contentPane.add(tmntLbl);

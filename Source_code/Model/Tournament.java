@@ -37,7 +37,7 @@ public class Tournament
 	private int minPlayerAge;
 	private int maxPlayerAge;
 	private int numTeams;
-	private final int minimumTeamSize = 6;
+	private int minimumTeamSize;
     private static int counter = 1;	// To get how many classes are instantiated
 
 	// constructor creates a tournament	
@@ -54,6 +54,8 @@ public class Tournament
 		this.minPlayerAge = minPlayerAge;
 		this.maxPlayerAge = maxPlayerAge;
 		this.numTeams = numTeams;
+		
+		this.minimumTeamSize = 6;
 
 		teams = new ArrayList<Team>();
 		seeding = new ArrayList<Team>();
@@ -62,6 +64,11 @@ public class Tournament
 	// accessors
 	public int getId(){
 		return id;
+	}
+	
+	public int minimumTeamSize() 
+	{
+		return minimumTeamSize;
 	}
 	
 	public String getName()
@@ -139,6 +146,9 @@ public class Tournament
 		if (team.size() < minimumTeamSize) 
 			return false;
 		
+		else if (teams.size() >= numTeams)
+			return false;
+		
 		for (Player p : team.getPlayers()) 
 			if (p.getAge() < minPlayerAge && p.getAge() > maxPlayerAge) 
 				return false;
@@ -148,18 +158,7 @@ public class Tournament
 		return true;
 	}
 	
-//	public Team getATeam(String name) {
-//		int pos = 0;
-//		for (int i = 0; i < teams.size(); i++) 
-//		{
-//			if (teams.get(i).getName() == name) 
-//				pos = i;
-//			System.out.println(teams.get(i).getName());
-//
-//		}
-//		return teams.get(pos);
-//		
-//	}
+
 	
 	// method to add and check validity of team to the tournament
 	public void addRank(Team team)
@@ -180,21 +179,6 @@ public class Tournament
 		}
 	}
 	
-//	// method to add and check validity of team to the tournament
-//		public void addTeam(Team team)
-//		{
-//			if (team.size() < minimumTeamSize) 
-//				System.out.println("Team size is lower than minimum limit");
-////				return false;
-//			
-//			for (Player p : team.getPlayers()) 
-//				if (p.getAge() < minPlayerAge && p.getAge() > maxPlayerAge) 
-//					System.out.println(p.getName() + " is younger than the age limit");
-////					return false;
-//			
-//			teams.add(team);
-////			return true;
-//		}
 	
 	// method to remove team from tournament
 	public boolean removeTeam(Team team)
@@ -266,10 +250,13 @@ public class Tournament
 		{
 			// tournament object to return
 			Team t = null;
+			Player p = null;
 			ArrayList<Team> tempTeam = new ArrayList<Team>();
 			
 			// variables to store data from file
 			String teamName = null;
+			String playerName = null;
+			int playerAge = 0;
 			
 			// xml document for to load file
 			Document dom;
@@ -287,20 +274,35 @@ public class Tournament
 							
 				// get root element
 				NodeList child = dom.getElementsByTagName("team");
+				NodeList child2 = dom.getElementsByTagName("player");
 				
 				for (int i = 0; i < child.getLength(); i++)
-				{
-					
-				Node temp = child.item(i);
+				{		
+				Node temp = child.item(i);	
+				Node temp2 = child.item(i);
 				
 				//	retrieves all the team names
 				if (temp.getNodeType() == Node.ELEMENT_NODE)
-					{
-				Element newRoot = (Element) temp;
-				teamName = getTextValue(child, newRoot, "teamName");
+			{
+				Element teamRoot = (Element) temp;
+				teamName = getTextValue(child, teamRoot, "teamName");
 				t = new Team(teamName);
+			
+				for (int k = i; k < child2.getLength(); k++) 
+				{
+				if (temp2.getNodeType() == Node.ELEMENT_NODE) 
+						{
+						Element playerRoot = (Element) temp2;
+						playerName = getTextValue(child2, playerRoot, "name");
+						playerAge = Integer.parseInt(getTextValue(child2, playerRoot, "age"));
+						p = new Player(playerName, playerAge);
+						t.addPlayer(p);
+						}
+				}
+			}		
+					
+								
 				tempTeam.add(t);
-					}
 				}
 				return tempTeam;
 				
@@ -345,6 +347,7 @@ public class Tournament
 		    
 		    return value;
 		}
+
 		
 		//gets a team object from a given team name.
 		public Team getATeam(String name) {		
