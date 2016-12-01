@@ -202,7 +202,7 @@ public class Tournament
 	public ArrayList<Team> getTeams()
 	{	
 		String line = null;
-		String tournamentFile = ("tournaments/" + getName() +".xml" );
+		String tournamentFile = ("tournaments/" + getId() +".xml" );
 		String file = "tournaments/files.txt";
 		
 		BufferedReader br;
