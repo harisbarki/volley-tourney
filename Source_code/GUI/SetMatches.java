@@ -67,7 +67,7 @@ public class SetMatches extends JFrame {
 	private JList<String> teamList;
 	private JList<String> seedingList;
 	
-	private List<Team> teams;
+	private ArrayList<Team> teams;
 
 
 	public SetMatches(Tournament tourney) {
@@ -99,8 +99,7 @@ public class SetMatches extends JFrame {
 		//buttons
 		btnCreateBracket = new JButton("Create Bracket");
 		btnSeedTeam = new JButton("Seed Team");
-		btnRemoveSeed = new JButton("Remove Seed");
-		
+		btnRemoveSeed = new JButton("Remove Seed");		
 		
 		//size of buttons
 		Dimension buttonSize = new Dimension(150,25);
@@ -125,31 +124,30 @@ public class SetMatches extends JFrame {
 				teamModel.addElement(t.getName());
 		}
 		
-//		initialize team list with model
+		// initialize team list with model
 		teamList = new JList<String>(teamModel);
 		
-//		create string list model for seeded teams
+		// create string list model for seeded teams
 		rankModel = new DefaultListModel<String>();	
 		//initialize seeding list with model
 		seedingList = new JList<String>(rankModel);
 		
 		
-//		create scroll pane for list of teams
+		// create scroll pane for list of teams
 		JScrollPane teamScrollPane = new JScrollPane(teamList);
 		Dimension teamScrollSize = teamList.getPreferredSize();
 		teamScrollSize.width = 150;
 		teamScrollSize.height = 156;
 		teamScrollPane.setPreferredSize(teamScrollSize);
 		
-//		create scroll pane for ranking of teams
+		// create scroll pane for ranking of teams
 		JScrollPane rankScrollPane = new JScrollPane(seedingList);
 		Dimension rankScrollSize = seedingList.getPreferredSize();
 		rankScrollSize.width = 150;
 		rankScrollSize.height = 156;
 		rankScrollPane.setPreferredSize(rankScrollSize);
 		
-// handle click event for add ranking
-		
+		// handle click event for add ranking
 		btnSeedTeam.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent event)
@@ -160,13 +158,9 @@ public class SetMatches extends JFrame {
 					
 						if (!selectedTeam.seeded()) 
 						{
-						tournament.addRank(selectedTeam);
-						rankModel.addElement(selectedTeam.getName());
-						teamModel.removeElement(selectedTeamName);
-						
-						System.out.println(tournament.showTopTeams());
-						System.out.println(selectedTeam.showSeedPos());
-						System.out.println(tournament.showTeams());
+							tournament.addRank(selectedTeam);
+							rankModel.addElement(selectedTeam.getName());
+							teamModel.removeElement(selectedTeamName);
 						}
 						else throw new IllegalStateException();
 					
@@ -181,47 +175,47 @@ public class SetMatches extends JFrame {
 			
 		});
 		
-// handle click event for remove rank
-		
+		// handle click event for remove rank
 		btnRemoveSeed.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent event) 
 			{
-			try {
-				String selectedTeamName = seedingList.getSelectedValue();
-				Team selectedTeam = tournament.getATeam(selectedTeamName);
-				
-				rankModel.removeElement(selectedTeamName);
-				teamModel.addElement(selectedTeamName);
-				tournament.removeRank(selectedTeam);
-				System.out.println(tournament.showTopTeams());
-				
+				try {
+						String selectedTeamName = seedingList.getSelectedValue();
+						Team selectedTeam = tournament.getATeam(selectedTeamName);
+						
+						rankModel.removeElement(selectedTeamName);
+						teamModel.addElement(selectedTeamName);
+						tournament.removeRank(selectedTeam);
 				}
-			catch(NullPointerException n) {
-				JOptionPane.showMessageDialog(null,"Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
+				catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null,"Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		
-		
-		
-// handle click event for set matches
-		
-//		btnSetMatches.addActionListener(new ActionListener() {
-//			
-//			public void actionPerformed(ActionEvent event)
-//			{
-//				try {
-//					
-//				}
-//				
-//			}
-//			
-//		});
+		// handle click event for set matches
+		btnCreateBracket.addActionListener(new ActionListener()
+		{	
+			public void actionPerformed(ActionEvent event)
+			{
+				if(tournament.getSeededTeams().size() == tournament.getNumTeams())
+				{
+					Bracket bracket = new Bracket(tournament,tournament.getSeededTeams());
+					ViewSchedules vs = new ViewSchedules(bracket);
+					vs.setVisible(true);
+					dispose();
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,"Please seed all teams", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+		});
 		
 		// arrange components and add to main panel
 		gbc.insets = new Insets(10,10,10,10);
-		
 		
 		gbc.gridx = 4;
 		gbc.gridy = 0;
