@@ -1,38 +1,29 @@
 package Model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
-/*
+/**
  * Class for each Matches where the scores, time and the
  * teams playing are stored. Once finished the referee
- * can input scores
- * 
- * The referee inputs scores??? spc
- * 
- * 
- * 
- * Need referee/organizer/coach classes because each have the same account 
- * functionalities yet different functionalities when it comes to teams
- * matches and tournaments
- * 
- * Would implement referee editing scores in referee class
- * the method would do something then call editScores here
+ * can input scores 
  */
-public class Match {
-	
+public class Match
+{
 	private Team team1;
 	private Team team2;
-	private String location;
-	private LocalDateTime time;
+	private final String LOCATION = "The Works";
+	private LocalDate schedule;
 	private boolean finished;
 	private int score1;
 	private int score2;
+	private int round;
 
-	public Match(Team team1, Team team2, String location, LocalDateTime time) {
+	public Match(Team team1, Team team2, LocalDate schedule)
+	{
 		this.team1 = team1;
 		this.team2 = team2;
-		this.location = location;
-		this.time = time;
+		this.schedule = schedule;
+		round = 1;
 		finished = false;
 		score1 = 0;
 		score2 = 0;
@@ -83,11 +74,29 @@ public class Match {
 	
 	// Method to get the location of the match
 	public String getLocation() {
-		return location;
+		return LOCATION;
 	}
 	
 	// Method to get the time of the match	
-	public LocalDateTime getTime() {
-		return time;
+	public LocalDate getSchedule() {
+		return schedule;
+	}
+	
+	public int getRound()
+	{
+		return round;
+	}
+	
+	public void setRound(int r)
+	{
+		round = r;
+	}
+	
+	public Team getWinner()
+	{
+		if(score1 > score2)
+			return team1;
+		else
+			return team2;
 	}
 }

@@ -25,8 +25,8 @@ import org.xml.sax.SAXException;
 public class Tournament 
 {
 	private int id;
-	private List<Team> teams;
-	private List<Team> seeding;
+	private ArrayList<Team> teams;
+	private ArrayList<Team> seeding;
 	private Schedule schedule;
 	private String name;
 	private String type;
@@ -190,13 +190,6 @@ public class Tournament
 		return false;
 	}
 	
-	// to create the schedule after registration has ended 
-	public void createSchedule()
-	{
-		schedule = new Schedule();
-		schedule.generateSchedule(teams, seeding, type);
-	}
-	
 	// display registered teams in the tournament
 	public String showTeams()
 	{
@@ -204,13 +197,13 @@ public class Tournament
 	}
 	
 	// display top ranked teams in the tournament
-	public List<Team> showTopTeams()
+	public ArrayList<Team> getSeededTeams()
 	{
 		return seeding;
 	}
 	
 	//gets the list of teams in the tournament
-	public List<Team> getTeams()
+	public ArrayList<Team> getTeams()
 	{	
 		String line = null;
 		String tournamentFile = ("tournaments/" + getName() +".xml" );
@@ -246,65 +239,64 @@ public class Tournament
 	}
 		
 	//gets the teams saved on the specific tournament file
-		public List<Team> getTeamFrom(String name)
+	public ArrayList<Team> getTeamFrom(String name)
+	{
+		// tournament object to return
+		Team t = null;
+		Player p = null;
+		ArrayList<Team> tempTeam = new ArrayList<Team>();
+		
+		// variables to store data from file
+		String teamName = null;
+		String playerName = null;
+		int playerAge = 0;
+			
+		// xml document for to load file
+		Document dom;
+			
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+		
+		try
 		{
-			// tournament object to return
-			Team t = null;
-			Player p = null;
-			ArrayList<Team> tempTeam = new ArrayList<Team>();
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
 			
-			// variables to store data from file
-			String teamName = null;
-			String playerName = null;
-			int playerAge = 0;
+			// load the xml file
+			dom = db.parse(name);
+						
+			// get root element
+			NodeList child = dom.getElementsByTagName("team");
+			NodeList child2 = dom.getElementsByTagName("player");
 			
-			// xml document for to load file
-			Document dom;
-			
-			// for building document builder
-			DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
-			
-			try
-			{
-				// create document using document builder
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				
-				// load the xml file
-				dom = db.parse(name);
-							
-				// get root element
-				NodeList child = dom.getElementsByTagName("team");
-				NodeList child2 = dom.getElementsByTagName("player");
-				
-				for (int i = 0; i < child.getLength(); i++)
-				{		
+			for (int i = 0; i < child.getLength(); i++)
+			{		
 				Node temp = child.item(i);	
 				Node temp2 = child.item(i);
 				
 				//	retrieves all the team names
 				if (temp.getNodeType() == Node.ELEMENT_NODE)
-			{
-				Element teamRoot = (Element) temp;
-				teamName = getTextValue(child, teamRoot, "teamName");
-				t = new Team(teamName);
-			
-				for (int k = i; k < child2.getLength(); k++) 
 				{
-				if (temp2.getNodeType() == Node.ELEMENT_NODE) 
+					Element teamRoot = (Element) temp;
+					teamName = getTextValue(child, teamRoot, "teamName");
+					t = new Team(teamName);
+			
+					for (int k = i; k < child2.getLength(); k++) 
+					{
+						if (temp2.getNodeType() == Node.ELEMENT_NODE) 
 						{
-						Element playerRoot = (Element) temp2;
-						playerName = getTextValue(child2, playerRoot, "name");
-						playerAge = Integer.parseInt(getTextValue(child2, playerRoot, "age"));
-						p = new Player(playerName, playerAge);
-						t.addPlayer(p);
+							Element playerRoot = (Element) temp2;
+							playerName = getTextValue(child2, playerRoot, "name");
+							playerAge = Integer.parseInt(getTextValue(child2, playerRoot, "age"));
+							p = new Player(playerName, playerAge);
+							t.addPlayer(p);
 						}
-				}
-			}		
-					
-								
+					}
+				}				
 				tempTeam.add(t);
-				}
-				return tempTeam;
+			}
+			
+			return tempTeam;
 				
 				
 			}
