@@ -235,7 +235,7 @@ public class CreateTournament extends JFrame implements ActionListener
 				formatDiv.setSelected(true);
 			}
 			
-			submit = new JButton("Edit");
+			submit = new JButton("Save");
 
 		}
 

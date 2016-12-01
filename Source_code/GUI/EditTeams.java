@@ -127,7 +127,7 @@ public class EditTeams extends JPanel {
 		btnAddPlayer.setBounds(101, 200, 114, 23);
 		add(btnAddPlayer);
 		
-		JButton btnEditTeam = new JButton("Edit Team");
+		JButton btnEditTeam = new JButton("Save Team");
 		btnEditTeam.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				String teamName;
@@ -143,7 +143,7 @@ public class EditTeams extends JPanel {
 							
 							//Edit team in XML????
 							
-							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null,teamName+ " has been saved!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "Tournament is already full!", "Error", JOptionPane.ERROR_MESSAGE);
