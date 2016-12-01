@@ -166,7 +166,7 @@ public class SetMatches extends JFrame {
 					
 				}
 				 catch(NullPointerException n) {
-					JOptionPane.showMessageDialog(null, "Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Please select a team", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				catch(IllegalStateException m) {
 					JOptionPane.showMessageDialog(null, "Team already seeded", "Error", JOptionPane.ERROR_MESSAGE);
@@ -189,7 +189,7 @@ public class SetMatches extends JFrame {
 						tournament.removeRank(selectedTeam);
 				}
 				catch(NullPointerException n) {
-					JOptionPane.showMessageDialog(null,"Please select a Team", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,"Please select a team", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

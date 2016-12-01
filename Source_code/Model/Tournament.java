@@ -126,6 +126,8 @@ public class Tournament
 	{
 		if (LocalDate.now().isAfter(registrationStart) && LocalDate.now().isBefore(registrationEnd))
 			return true;
+		else if(inProgress())
+			return false;
 		else
 			return false;
 	}
@@ -142,17 +144,12 @@ public class Tournament
 	// method to add and check validity of team to the tournament
 	public boolean addTeam(Team team)
 	{
-		if (team.size() < minimumTeamSize) 
+		if(team.size() < minimumTeamSize)
+		{
+			System.out.println("too small");	// debug
 			return false;
-		
-		else if (teams.size() >= numTeams)
-			return false;
-		
-		for (Player p : team.getPlayers()) 
-			if (p.getAge() < minPlayerAge || p.getAge() > maxPlayerAge) 
-				return false;
-			else
-				teams.add(team);
+		}
+		teams.add(team);
 		
 		return true;
 	}

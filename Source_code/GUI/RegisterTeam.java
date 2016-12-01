@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.EventQueue;
 import java.awt.MenuBar;
 
 import javax.swing.JFrame;
@@ -24,12 +23,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.swing.JTextField;
-import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JComboBox;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
@@ -38,14 +35,8 @@ import java.awt.event.MouseEvent;
 import Model.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class RegisterTeam extends JFrame {
@@ -69,7 +60,7 @@ public class RegisterTeam extends JFrame {
 	 * Create the frame.
 	 */
 	public RegisterTeam(Tournament tourney) {
-//	public RegisterTeam() {
+		
 		setTitle("Register Team");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
@@ -113,7 +104,7 @@ public class RegisterTeam extends JFrame {
 		lblPlayerAge.setBounds(14, 166, 70, 15);
 		contentPane.add(lblPlayerAge);
 
-		selectAge = new JSpinner(new SpinnerNumberModel(10,0,100,1));
+		selectAge = new JSpinner(new SpinnerNumberModel(tournament.getMinAge(),0,100,1));
 		selectAge.setSize(40, 25);
 		selectAge.setLocation(101, 166);
 		contentPane.add(selectAge);
@@ -142,8 +133,12 @@ public class RegisterTeam extends JFrame {
 					}
 					else {
 						Player p = new 	Player(name, age);
-						players.add(p);
-						model.addElement(name + " : " + age);
+						if (p.getAge() < tournament.getMinAge() || p.getAge() > tournament.getMaxAge())
+							JOptionPane.showMessageDialog(null, "This player is not within the required age range", "Error", JOptionPane.ERROR_MESSAGE);
+						else {
+							players.add(p);
+							model.addElement(name + " : " + age);
+						}
 					}
 				}
 				catch (NullPointerException ex) { // validate input
@@ -151,7 +146,7 @@ public class RegisterTeam extends JFrame {
 				}
 				finally {
 					txtPlayerName.setText("");
-					selectAge.setValue(10);					
+					selectAge.setValue(tournament.getMinAge());					
 				}
 			}
 		});
@@ -162,7 +157,6 @@ public class RegisterTeam extends JFrame {
 		btnRegisterTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String teamName;
-				
 				try {
 					teamName = txtTeamName.getText();
 					if (teamName.equals(""))     throw new NullPointerException();
@@ -174,17 +168,22 @@ public class RegisterTeam extends JFrame {
 						{
 							saveTeam(tournament.getName(),team);
 							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+							txtTeamName.setText("");
+							model.removeAllElements();
 						}
 						else {
-							JOptionPane.showMessageDialog(null, "Please check registration details!", "Error", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Registration deadline passed!", "Error", JOptionPane.ERROR_MESSAGE);
 						}
-						
-						if(tournament.getTeams().size() == tournament.getNumTeams())
-						{
-							btnRegisterTeam.setEnabled(false);
-							JOptionPane.showMessageDialog(null, "Registration is closed!", "Error", JOptionPane.ERROR_MESSAGE);
-						}
-					}	
+					}
+					if(tournament.getTeams().size() == tournament.getNumTeams())
+					{
+						btnRegisterTeam.setEnabled(false);
+						JOptionPane.showMessageDialog(null, "The tournament's team capacity has now been reached", "Registration Closed", JOptionPane.INFORMATION_MESSAGE);
+
+						MainMenu mm = new MainMenu();
+						dispose();
+						mm.setVisible(true);
+					}
 				}
 				catch(IllegalStateException i) {
 					JOptionPane.showMessageDialog(null, "Please add more players", "Error", JOptionPane.ERROR_MESSAGE);
