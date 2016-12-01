@@ -57,6 +57,7 @@ public class RegisterTeam extends JFrame {
 	private JList<String> lstPlayers;
 	private JSpinner selectAge;
 	private DefaultListModel<String> model;
+	private JButton btnRegisterTeam;
 	
 	private MenuBar menuBar;
 	private Tournament tournament;
@@ -157,7 +158,7 @@ public class RegisterTeam extends JFrame {
 		btnAddPlayer.setBounds(101, 200, 114, 23);
 		contentPane.add(btnAddPlayer);
 		
-		JButton btnRegisterTeam = new JButton("Register Team");
+		btnRegisterTeam = new JButton("Register Team");
 		btnRegisterTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String teamName;
