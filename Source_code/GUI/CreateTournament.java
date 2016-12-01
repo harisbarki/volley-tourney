@@ -492,7 +492,7 @@ public class CreateTournament extends JFrame implements ActionListener
 				Tournament t = new Tournament(name, type, startDate, endDate, rStartDate, rEndDate, minPlayerAge, maxPlayerAge, teams);
 				
 				if(editableTournament != null) {
-					boolean updated = updateTournament(editableTournament.getName(), t);
+					boolean updated = updateTournament(editableTournament.getId()+"", t);
 					if(updated)				
 						JOptionPane.showMessageDialog(this, "Tournament Updated!");
 					else
@@ -500,7 +500,7 @@ public class CreateTournament extends JFrame implements ActionListener
 				}
 				else {
 					// attempt to save details to file
-					boolean saved = saveFile(t, name);
+					boolean saved = saveFile(t, t.getId() + "");
 					// give user feedback
 					if(saved)				
 						JOptionPane.showMessageDialog(this, "Tournament Created!");

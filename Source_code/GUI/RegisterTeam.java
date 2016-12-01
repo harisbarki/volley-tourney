@@ -166,7 +166,7 @@ public class RegisterTeam extends JFrame {
 						for (Player p : players) team.addPlayer(p);
 						if(tournament.addTeam(team))
 						{
-							saveTeam(tournament.getName(),team);
+							saveTeam(tournament.getId() + "",team);
 							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 							txtTeamName.setText("");
 							model.removeAllElements();
