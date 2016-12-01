@@ -57,8 +57,8 @@ public class TournamentDetails extends JPanel {
 		btnEditTournament.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				try {
-					CreateTournament etPanel = new CreateTournament (tourney);
-					menu.setVisible(false);
+					CreateTournament etPanel = new CreateTournament(tournament);
+					mainMenu.setVisible(false);
 					etPanel.setVisible(true);
 				} catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
