@@ -213,15 +213,6 @@ public class MainMenu extends JFrame
 			}
 		});
 		
-		tournamentList.addListSelectionListener(new ListSelectionListener(){
-			public void valueChanged(ListSelectionEvent listSelectionEvent)
-			{
-				Tournament t = getSelectedTournament();
-				if(t.getBracket() != null)
-					btnSetSchedule.setEnabled(false);
-			}
-		});
-		
 		// arrange components and add to main panel
 		gbc.insets = new Insets(10,10,10,10);
 		
