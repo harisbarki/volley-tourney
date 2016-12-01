@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 
 import GUI.CreateTournament;
 import GUI.TopMenu;
+import Model.Team;
 import Model.Tournament;
 
 
@@ -47,6 +48,7 @@ public class MainMenu extends JFrame
 	private JButton btnViewSchedule;
 	private JButton btnTournamentDetails;
 	private JPanel mainPanel;
+	private JPanel tournamentDetails;
 	
 	private JList<String> tournamentList;
 	private ArrayList<Tournament> tournaments;
@@ -180,7 +182,7 @@ public class MainMenu extends JFrame
 				}
 			}
 		});
-		
+		final MainMenu m = this;
 		//handle click event for tournament details
 		btnTournamentDetails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -189,10 +191,10 @@ public class MainMenu extends JFrame
 					Scanner s = new Scanner(selectedTournamentName);
 					int selectedTournamentId = s.nextInt();
 					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
-					TournamentDetails r = new TournamentDetails(selectedTournament);
+					tournamentDetails = new TournamentDetails(selectedTournament, m);
 					mainPanel.setVisible(false);
-					add(r);
-					r.setVisible(true);
+					add(tournamentDetails);
+					tournamentDetails.setVisible(true);
 					s.close();
 				} catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
@@ -238,6 +240,13 @@ public class MainMenu extends JFrame
 				
 		// display frame
 		setVisible(true);
+	}
+	
+	public void editTeam(Tournament tournament, Team team) {
+		EditTeams r = new EditTeams(tournament, team);
+		tournamentDetails.setVisible(false);
+		r.setVisible(true);
+		add(r);
 	}
 	
 	/**

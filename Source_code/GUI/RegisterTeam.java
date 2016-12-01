@@ -5,6 +5,7 @@ import java.awt.MenuBar;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.border.EmptyBorder;
 import javax.xml.parsers.DocumentBuilder;
@@ -118,11 +119,13 @@ public class RegisterTeam extends JFrame {
 		
 		players = new ArrayList<Player>();
 		
+		JScrollPane sp = new JScrollPane();
 		lstPlayers = new JList<String>();
-		lstPlayers.setBounds(340, 107, 186, 169);
-		contentPane.add(lstPlayers);
 		model = new DefaultListModel<String>();
 		lstPlayers.setModel(model);
+		contentPane.add(sp);
+		sp.setViewportView(lstPlayers);
+		sp.setBounds(340, 107, 186, 169);
 		
 		JButton btnAddPlayer = new JButton("Add Player");
 		btnAddPlayer.addMouseListener(new MouseAdapter() {

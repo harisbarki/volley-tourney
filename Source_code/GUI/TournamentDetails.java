@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -26,6 +27,7 @@ public class TournamentDetails extends JPanel {
 	private JButton btnEditTeam;
 	
 	private Tournament tournament;
+	private MainMenu mainMenu;
 	
 	private JList<String> teamList;
 	
@@ -34,10 +36,10 @@ public class TournamentDetails extends JPanel {
 	
 	private DefaultListModel<String> teamModel;
 	
-	public TournamentDetails(Tournament tourney) 
+	public TournamentDetails(Tournament tourney, MainMenu menu) 
 	{
 		this.tournament = tourney;
-		
+		mainMenu = menu;
 		
 		// Main panel layout and format
 		setSize(300,300);
@@ -93,15 +95,12 @@ public class TournamentDetails extends JPanel {
 //		});
 		
 		//handle action event for edit team
-//		btnEditTeam.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent event) {
-//				
-//			}
-//				
-//					
-//				
-//			
-//		});
+		btnEditTeam.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				Team team = tournament.getATeam(teamList.getSelectedValue());
+				mainMenu.editTeam(tournament, team);
+			}
+		});
 		
 		
 	gbc.insets = new Insets(10, 0, 10, 0);

@@ -150,7 +150,7 @@ public class Tournament
 			return false;
 		
 		for (Player p : team.getPlayers()) 
-			if (p.getAge() < minPlayerAge && p.getAge() > maxPlayerAge) 
+			if (p.getAge() < minPlayerAge || p.getAge() > maxPlayerAge) 
 				return false;
 			else
 				teams.add(team);
