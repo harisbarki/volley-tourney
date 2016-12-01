@@ -38,6 +38,7 @@ public class Tournament
 	private int numTeams;
 	private int minimumTeamSize;
     private static int counter = 1;	// To get how many classes are instantiated
+    private Bracket bracket;
 
 	// constructor creates a tournament	
 	public Tournament(String name, String type, LocalDate tournamentStart, LocalDate tournamentEnd, LocalDate registrationStart, LocalDate registrationEnd, int minPlayerAge, int maxPlayerAge, int numTeams) 
@@ -55,6 +56,8 @@ public class Tournament
 		this.numTeams = numTeams;
 		
 		this.minimumTeamSize = 6;
+		
+		bracket = null;
 
 		teams = new ArrayList<Team>();
 		seeding = new ArrayList<Team>();
@@ -346,7 +349,15 @@ public class Tournament
 			
 		}
 		
+		public Bracket getBracket()
+		{
+			return bracket;
+		}
 		
+		public void setBracket(Bracket b)
+		{
+			bracket = b;
+		}
 		
 	
 }
