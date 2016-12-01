@@ -37,6 +37,7 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import Model.Tournament;
 import GUI.TopMenu;
@@ -48,6 +49,8 @@ import GUI.TopMenu;
 public class CreateTournament extends JFrame implements ActionListener
 {
 	// instance variables
+	private Tournament editableTournament;
+
 	private final int WIDTH  = 550;
 	private final int HEIGHT = 600;
 	private final String tournamentFile = "tournaments/files.txt";
@@ -88,6 +91,12 @@ public class CreateTournament extends JFrame implements ActionListener
 
 	public CreateTournament()
 	{
+		addComponents();
+	}
+	
+	public CreateTournament(Tournament t)
+	{
+		this.editableTournament = t;
 		addComponents();
 	}
 
@@ -199,6 +208,36 @@ public class CreateTournament extends JFrame implements ActionListener
 		
 		// main button
 		submit = new JButton("Create");
+		
+		if(editableTournament != null) {
+			tName.setText(editableTournament.getName());
+
+			tStartDate.getJFormattedTextField()
+			.setText(DateLabelFormatter.toStringFormat(editableTournament.getStartDate()));
+			
+			tEndDate.getJFormattedTextField().setText(DateLabelFormatter.toStringFormat(editableTournament.getEndDate()));
+
+			regStartDate.getJFormattedTextField()
+			.setText(DateLabelFormatter.toStringFormat(editableTournament.getRegStartDate()));
+			
+			regEndDate.getJFormattedTextField()
+			.setText(DateLabelFormatter.toStringFormat(editableTournament.getRegEndDate()));
+
+			minAge.setValue(editableTournament.getMinAge());
+
+			maxAge.setValue(editableTournament.getMaxAge());
+			numTeams.setValue(editableTournament.getNumTeams());
+
+			if (editableTournament.getType().equals("Single Elimination")) {
+				formatSE.setSelected(true);
+			}
+			else {
+				formatDiv.setSelected(true);
+			}
+			
+			submit = new JButton("Edit");
+
+		}
 
 		// arrange components and add to main panel
 		gbc.gridx = 0;
@@ -452,25 +491,28 @@ public class CreateTournament extends JFrame implements ActionListener
 				// create tournament object
 				Tournament t = new Tournament(name, type, startDate, endDate, rStartDate, rEndDate, minPlayerAge, maxPlayerAge, teams);
 				
-				// attempt to save details to file
-				boolean saved = saveFile(t, name);
+				if(editableTournament != null) {
+					boolean updated = updateTournament(editableTournament.getName(), t);
+					if(updated)				
+						JOptionPane.showMessageDialog(this, "Tournament Updated!");
+					else
+						JOptionPane.showMessageDialog(this, "Something went wrong!");
+				}
+				else {
+					// attempt to save details to file
+					boolean saved = saveFile(t, name);
+					// give user feedback
+					if(saved)				
+						JOptionPane.showMessageDialog(this, "Tournament Created!");
+					else
+						JOptionPane.showMessageDialog(this, "Something went wrong!");
+				}
 				
-				// give user feedback
-				if(saved)				
-					JOptionPane.showMessageDialog(this, "Tournament Created!");
-				else
-					JOptionPane.showMessageDialog(this, "Something went wrong!");
+				MainMenu mm = new MainMenu();
+				dispose();
+				mm.setVisible(true);
 				
-				// reset all fields to default values
-				tName.setText("");
-				tStartDate.getJFormattedTextField().setText("");
-				tEndDate.getJFormattedTextField().setText("");
-				regStartDate.getJFormattedTextField().setText("");
-				regEndDate.getJFormattedTextField().setText("");
-				minAge.setValue(10);
-				maxAge.setValue(20);
-				numTeams.setValue(2);
-				formatDiv.setSelected(true);
+				
 			}
 		}
 	}
@@ -608,5 +650,119 @@ public class CreateTournament extends JFrame implements ActionListener
 			System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
 			return false;
 		}
+	}
+	
+	/**
+	 * This method attempts to update tournament to the file.
+	 * 
+	 * @param name
+	 *            the name of the file
+	 * @param updatedTournament
+	 *            Tournament
+	 * @return A flag indicating success or failure to update the file
+	 */
+	public boolean updateTournament(String name, Tournament updatedTournament)
+	{	
+		// get name for retrieving save file
+		String fileName = "tournaments/" + name + ".xml";
+		
+		// xml document for to load file
+		Document dom;
+				
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+				
+		try
+		{
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+					
+			// load the xml file
+			dom = db.parse(fileName);
+			
+			// get root element
+			Element root = dom.getDocumentElement();
+			
+			// Get name element
+			NodeList nameList = dom.getElementsByTagName("name");			
+			Element nameElement = (Element) nameList.item(0);
+			nameElement.setTextContent(updatedTournament.getName());
+			
+			// Get type element
+			NodeList typeList = dom.getElementsByTagName("type");
+			Element typeElement = (Element) typeList.item(0);
+			typeElement.setTextContent(updatedTournament.getType());
+			
+			// Get numteams element
+			NodeList numteamsList = dom.getElementsByTagName("numTeams");
+			Element numteamsElement = (Element) numteamsList.item(0);
+			numteamsElement.setTextContent(Integer.toString(updatedTournament.getNumTeams()));
+			
+			// Get regStartDate element
+			NodeList regSDList = dom.getElementsByTagName("regStartDate");
+			Element regSDElement = (Element) regSDList.item(0);
+			regSDElement.setTextContent(updatedTournament.getRegStartDate().toString());
+
+			// Get regEndDate element
+			NodeList regEDList = dom.getElementsByTagName("regEndDate");
+			Element regEDElement = (Element) regEDList.item(0);
+			regEDElement.setTextContent(updatedTournament.getRegEndDate().toString());
+			
+			// Get Tournament Start Date element
+			NodeList tourSDList = dom.getElementsByTagName("startDate");
+			Element tourSDElement = (Element) tourSDList.item(0);
+			tourSDElement.setTextContent(updatedTournament.getStartDate().toString());
+
+			// Get Tournament End Date element
+			NodeList tourEDList = dom.getElementsByTagName("endDate");
+			Element tourEDElement = (Element) tourEDList.item(0);
+			tourEDElement.setTextContent(updatedTournament.getEndDate().toString());
+			
+			// Get minPlayerAge element
+			NodeList minPlayerAgeList = dom.getElementsByTagName("minPlayerAge");
+			Element minPlayerAgeElement = (Element) minPlayerAgeList.item(0);
+			minPlayerAgeElement.setTextContent(Integer.toString(updatedTournament.getMinAge()));
+			
+			// Get maxPlayerAge element
+			NodeList maxPlayerAgeList = dom.getElementsByTagName("maxPlayerAge");
+			Element maxPlayerAgeElement = (Element) maxPlayerAgeList.item(0);
+			maxPlayerAgeElement.setTextContent(Integer.toString(updatedTournament.getMaxAge()));
+			
+			try
+			{
+				// add properties to file and format it
+				Transformer tr = TransformerFactory.newInstance().newTransformer();
+				tr.setOutputProperty(OutputKeys.INDENT, "yes");
+				tr.setOutputProperty(OutputKeys.METHOD, "xml");
+				tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+				tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "tournament.dtd");
+				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+				
+				// save file
+				tr.transform(new DOMSource(dom), new StreamResult(new FileOutputStream(fileName)));
+				return true;
+			}
+			catch(TransformerException te)
+			{
+				System.out.println(te.getMessage());
+			}
+			catch(IOException ioe)
+			{
+				System.out.println(ioe.getMessage());
+			}
+		}
+		catch(ParserConfigurationException pce)
+		{
+			System.out.println(pce.getMessage());
+		}
+		catch(SAXException se)
+		{
+            System.out.println(se.getMessage());
+        }
+		catch(IOException ioe)
+		{
+			System.out.println(ioe.getMessage());
+		}
+		return false;
 	}
 }

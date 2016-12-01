@@ -53,6 +53,18 @@ public class TournamentDetails extends JPanel {
 		
 		//buttons
 		btnEditTournament = new JButton("Edit Tournament");
+		//handle click event for tournament Edit
+		btnEditTournament.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				try {
+					CreateTournament etPanel = new CreateTournament (tourney);
+					menu.setVisible(false);
+					etPanel.setVisible(true);
+				} catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnEditTeam = new JButton("Edit Team");
 		
 		//JLabel tournament name
