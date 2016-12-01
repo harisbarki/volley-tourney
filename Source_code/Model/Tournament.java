@@ -27,7 +27,6 @@ public class Tournament
 	private int id;
 	private ArrayList<Team> teams;
 	private ArrayList<Team> seeding;
-	private Schedule schedule;
 	private String name;
 	private String type;
 	private LocalDate tournamentStart;
