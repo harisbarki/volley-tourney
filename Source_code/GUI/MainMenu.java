@@ -98,7 +98,7 @@ public class MainMenu extends JFrame
 
 		
 		// set size of buttons
-		Dimension dim = new Dimension(150,25);
+		Dimension dim = new Dimension(200,25);
 		btnRegisterTeam.setPreferredSize(dim);
 		btnViewSchedule.setPreferredSize(dim);
 		btnSetSchedule.setPreferredSize(dim);
@@ -127,6 +127,10 @@ public class MainMenu extends JFrame
 			
 		// initialize list with model
 		tournamentList = new JList<String>(model);
+//		else if((Tournament) tournamentList.getSelectedValue().getNumTeams() == (Tournament) tournamentList.getSelectedValue().getTeams().size())
+//		{
+//			
+//		}
 		// create scroll pane
 		JScrollPane scrollPane = new JScrollPane(tournamentList);
 		Dimension d = tournamentList.getPreferredSize();
@@ -155,10 +159,19 @@ public class MainMenu extends JFrame
 					Scanner s = new Scanner(selectedTournamentName);
 					int selectedTournamentId = s.nextInt();
 					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
-			        RegisterTeam r = new RegisterTeam(selectedTournament);
-			        r.setVisible(true);
-			        s.close();
-			        dispose();
+
+					if(selectedTournament.getTeams().size() == selectedTournament.getNumTeams())
+					{
+						btnRegisterTeam.setEnabled(false);
+						JOptionPane.showMessageDialog(null, "The tournament's team capacity has been reached", "Registration Closed", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else
+					{
+				        RegisterTeam r = new RegisterTeam(selectedTournament);
+				        r.setVisible(true);
+				        s.close();
+				        dispose();
+					}
 				} catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null,  "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -173,10 +186,18 @@ public class MainMenu extends JFrame
 					Scanner s = new Scanner(selectedTournamentName);
 					int selectedTournamentId = s.nextInt();
 					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
-					SetMatches r = new SetMatches(selectedTournament);
-					r.setVisible(true);
-					s.close();
-					dispose();
+					if(selectedTournament.getTeams().size() < selectedTournament.getNumTeams()) 
+					{
+						JOptionPane.showMessageDialog(null, "Please register more teams", "Error", JOptionPane.ERROR_MESSAGE);
+						btnSetSchedule.setEnabled(false);
+					}
+					else
+					{
+						SetMatches r = new SetMatches(selectedTournament);
+						r.setVisible(true);
+						s.close();
+						dispose();
+					}
 				} catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null,  "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
 				}
