@@ -158,9 +158,10 @@ public class RegisterTeam extends JFrame {
 		contentPane.add(btnAddPlayer);
 		
 		JButton btnRegisterTeam = new JButton("Register Team");
-		btnRegisterTeam.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent arg0) {
+		btnRegisterTeam.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				String teamName;
+				
 				try {
 					teamName = txtTeamName.getText();
 					if (teamName.equals(""))     throw new NullPointerException();
@@ -168,14 +169,20 @@ public class RegisterTeam extends JFrame {
 					else {
 						Team team = new Team(teamName);
 						for (Player p : players) team.addPlayer(p);
-						if(tournament.addTeam(team)) {
-							System.out.print(tournament.getName() + ": " + tournament.showTeams());
+						if(tournament.addTeam(team))
+						{
 							saveTeam(tournament.getName(),team);
 							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
 						else {
-							JOptionPane.showMessageDialog(null, "Tournament is already full!", "Error", JOptionPane.ERROR_MESSAGE);
-						}							
+							JOptionPane.showMessageDialog(null, "Please check registration details!", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+						
+						if(tournament.getTeams().size() == tournament.getNumTeams())
+						{
+							btnRegisterTeam.setEnabled(false);
+							JOptionPane.showMessageDialog(null, "Registration is closed!", "Error", JOptionPane.ERROR_MESSAGE);
+						}
 					}	
 				}
 				catch(IllegalStateException i) {
