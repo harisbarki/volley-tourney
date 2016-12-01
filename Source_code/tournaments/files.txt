@@ -1,2 +1,1 @@
-tournaments/Dido's Tournament.xml
-tournaments/Tomi's tourney.xml
+tournaments/1.xml

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tournament SYSTEM "tournament.dtd">
+<tournament>
+    <id>1</id>
+    <name>Test Tourney</name>
+    <type>Single Elimination</type>
+    <numTeams>2</numTeams>
+    <regStartDate>2016-12-01</regStartDate>
+    <regEndDate>2016-12-09</regEndDate>
+    <startDate>2016-12-16</startDate>
+    <endDate>2016-12-16</endDate>
+    <minPlayerAge>10</minPlayerAge>
+    <maxPlayerAge>22</maxPlayerAge>
+    <teamList>
+        <team>
+            <teamName>Team1</teamName>
+            <player>
+                <name>hajosfk</name>
+                <age>10</age>
+            </player>
+            <player>
+                <name>asdadsasd</name>
+                <age>10</age>
+            </player>
+            <player>
+                <name>vddfdf</name>
+                <age>10</age>
+            </player>
+            <player>
+                <name>sdaasd</name>
+                <age>10</age>
+            </player>
+            <player>
+                <name>das</name>
+                <age>10</age>
+            </player>
+            <player>
+                <name>sadsda</name>
+                <age>10</age>
+            </player>
+        </team>
+    </teamList>
+</tournament>
