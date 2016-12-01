@@ -110,8 +110,13 @@ public class TournamentDetails extends JPanel {
 		//handle action event for edit team
 		btnEditTeam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				Team team = tournament.getATeam(teamList.getSelectedValue());
-				mainMenu.editTeam(tournament, team);
+				try {
+					Team team = tournament.getATeam(teamList.getSelectedValue());
+					mainMenu.editTeam(tournament, team);
+				}
+				catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please select a team", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		
