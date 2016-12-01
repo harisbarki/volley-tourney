@@ -55,6 +55,7 @@ public class EditTeams extends JPanel {
 		
 		this.tournament = tourney;
 		this.team = team;
+		tournament.removeTeam(team);
 		
 
 		txtTeamName = new JTextField(team.getName());
