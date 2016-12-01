@@ -6,9 +6,9 @@
     <type>Divisions</type>
     <numTeams>6</numTeams>
     <regStartDate>2016-12-01</regStartDate>
-    <regEndDate>2016-12-01</regEndDate>
-    <startDate>2016-12-01</startDate>
-    <endDate>2016-12-01</endDate>
+    <regEndDate>2016-12-03</regEndDate>
+    <startDate>2016-12-06</startDate>
+    <endDate>2016-12-09</endDate>
     <minPlayerAge>10</minPlayerAge>
     <maxPlayerAge>22</maxPlayerAge>
     <teamList>

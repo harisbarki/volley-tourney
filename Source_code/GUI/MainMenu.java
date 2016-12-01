@@ -213,15 +213,6 @@ public class MainMenu extends JFrame
 			}
 		});
 		
-		tournamentList.addListSelectionListener(new ListSelectionListener(){
-			public void valueChanged(ListSelectionEvent listSelectionEvent)
-			{
-				Tournament t = getSelectedTournament();
-				if(t.getBracket() != null)
-					btnSetSchedule.setEnabled(false);
-			}
-		});
-		
 		// arrange components and add to main panel
 		gbc.insets = new Insets(10,10,10,10);
 		
@@ -350,9 +341,9 @@ public class MainMenu extends JFrame
 			tType = getTextValue(root, "type");
 			numTeams = Integer.parseInt(getTextValue(root, "numTeams"));
 			regSD = LocalDate.parse(getTextValue(root, "regStartDate"), df);
-			regED = LocalDate.parse(getTextValue(root, "regStartDate"), df);
-			tSD = LocalDate.parse(getTextValue(root, "regStartDate"), df);
-			tED = LocalDate.parse(getTextValue(root, "regEndDate"), df);
+			regED = LocalDate.parse(getTextValue(root, "regEndDate"), df);
+			tSD = LocalDate.parse(getTextValue(root, "startDate"), df);
+			tED = LocalDate.parse(getTextValue(root, "endDate"), df);
 			minAge = Integer.parseInt(getTextValue(root, "minPlayerAge"));
 			maxAge = Integer.parseInt(getTextValue(root, "maxPlayerAge"));
 			
