@@ -11,24 +11,47 @@ public class Team {
 	private String name;
 	private ArrayList<Player> players;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 */
 	public Team(String name) {
 		seed = -1; // sets the default seeding position as -1 when not seeded
 		this.name = name;
 		players = new ArrayList<Player>();
 	}
 
+	/**
+	 * 
+	 * @return name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set seeding position of this team
+	 * 
+	 * @param s
+	 */
 	public void setSeedingPos(int s) {
 		seed = s;
 	}
 
+	/**
+	 * Show seeding position of this team
+	 * 
+	 * @return seed
+	 */
 	public int showSeedPos() {
 		return seed;
 	}
 
+	/**
+	 * 
+	 * @return seeded or not flag
+	 */
 	public boolean seeded() {
 		if (showSeedPos() == -1)
 			return false;
@@ -36,12 +59,21 @@ public class Team {
 			return true;
 	}
 
-	// Method to add player to team
+	/**
+	 * Add player to the team
+	 * 
+	 * @param p
+	 */
 	public void addPlayer(Player p) {
 		players.add(p);
 	}
 
-	// Method to remove player from team
+	/**
+	 * Remove player from the team
+	 * 
+	 * @param p
+	 * @return
+	 */
 	public boolean removePlayer(Player p) {
 		if (!players.contains(p))
 			return false;
@@ -50,20 +82,37 @@ public class Team {
 		return true;
 	}
 
-	// Getter for list of players
+	/**
+	 * Return all players of this team
+	 * 
+	 * @return list of players
+	 */
 	public ArrayList<Player> getPlayers() {
 		return players;
 	}
 
-	// Getter for number of players
+	/**
+	 * 
+	 * @return number of players
+	 */
 	public int size() {
 		return players.size();
 	}
 
+	/**
+	 * 
+	 * @return wins of this team
+	 */
 	public int getWins() {
 		return wins;
 	}
 
+	/**
+	 * Checks if this team equals another team
+	 * 
+	 * @param other
+	 * @return flag
+	 */
 	public boolean equals(Team other) {
 		if (this.getPlayers().size() != other.getPlayers().size())
 			return false;
@@ -80,6 +129,9 @@ public class Team {
 		return false;
 	}
 
+	/**
+	 * Beautifies the team into a string
+	 */
 	public String toString() {
 		return "Team Name: " + this.name + ", Players: " + this.players.toString();
 	}

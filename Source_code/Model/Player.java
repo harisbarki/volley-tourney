@@ -8,21 +8,38 @@ public class Player {
 	private int age;
 	private String name;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param name
+	 * @param age
+	 */
 	public Player(String name, int age) {
 		this.age = age;
 		this.name = name;
 	}
 
-	// getter for name of player
+	/**
+	 * 
+	 * @return name of player
+	 */
 	public String getName() {
 		return name;
 	}
 
-	// getter for age of player
+	/**
+	 * 
+	 * @return age of player
+	 */
 	public int getAge() {
 		return age;
 	}
 
+	/**
+	 * converts the data into neat string
+	 * 
+	 * @return string
+	 */
 	public String toString() {
 		return "[Name = " + this.name + ", Age = " + this.age + "]";
 	}

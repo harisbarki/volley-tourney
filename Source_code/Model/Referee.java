@@ -11,11 +11,21 @@ public class Referee extends Account {
 
 	private List<Match> matchList;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param username
+	 * @param password
+	 * @param name
+	 */
 	public Referee(String username, String password, String name) {
 		super(username, password, name);
 	}
 
-	// Method to get the list of matches this referee is refereeing.
+	/**
+	 * 
+	 * @return list of matches
+	 */
 	public List<Match> getMatchList() {
 		return matchList;
 	}
