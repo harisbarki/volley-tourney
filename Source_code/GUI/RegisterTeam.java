@@ -170,6 +170,7 @@ public class RegisterTeam extends JFrame {
 							JOptionPane.showMessageDialog(null,teamName+ " has been registered!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 							txtTeamName.setText("");
 							model.removeAllElements();
+							players.clear();
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "Registration deadline passed!", "Error", JOptionPane.ERROR_MESSAGE);
