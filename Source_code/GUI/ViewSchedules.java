@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Queue;
-
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
@@ -33,17 +32,15 @@ import javax.swing.border.EmptyBorder;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import Model.Bracket;
 import Model.Match;
 import Model.Team;
-import Model.Tournament;
 
+@SuppressWarnings("serial")
 public class ViewSchedules extends JFrame
 {
 	private final int WIDTH = 500;
@@ -285,6 +282,10 @@ public class ViewSchedules extends JFrame
 		add(mainPanel, BorderLayout.NORTH);
 	}
 	
+	/**
+	 * Get all the matches
+	 * @return the list of matches
+	 */
 	public ArrayList<Match> loadMatches()
 	{
 		String line = null;
@@ -321,6 +322,11 @@ public class ViewSchedules extends JFrame
 		}
 	}
 	
+	/**
+	 * Get a match
+	 * @param name
+	 * @return Match after finding it
+	 */
 	public Match getMatch(String name)
 	{
 		// match object to return

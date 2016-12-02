@@ -1,7 +1,6 @@
 package GUI;
 
 import java.awt.MenuBar;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,12 +15,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JLabel;
@@ -31,7 +28,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import Model.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class RegisterTeam extends JFrame {
 
 	private JPanel contentPane;

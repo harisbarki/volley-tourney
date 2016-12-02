@@ -1,7 +1,6 @@
 package GUI;
 
 import Model.*;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -10,19 +9,9 @@ import java.awt.Insets;
 import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,35 +29,30 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+@SuppressWarnings("serial")
 public class SetMatches extends JFrame {
-
 	private final int WIDTH = 500;
 	private final int HEIGHT = 430;
-
 	private MenuBar menuBar;
 	private JButton btnCreateBracket;
 	private JButton btnSeedTeam;
 	private JButton btnRemoveSeed;
-
 	private Tournament tournament;
-
 	private DefaultListModel<String> rankModel;
 	private DefaultListModel<String> teamModel;
-
 	private JList<String> teamList;
 	private JList<String> seedingList;
-
 	private ArrayList<Team> teams;
 
-	private final String tournamentFile = "tournaments/files.txt";
-
+	/**
+	 * Constructor
+	 * @param tourney
+	 */
 	public SetMatches(Tournament tourney) {
 
 		// setting frame properties
