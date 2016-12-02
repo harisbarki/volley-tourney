@@ -149,7 +149,7 @@ public class Tournament
 	{
 		if(team.size() < minimumTeamSize)
 		{
-			System.out.println("too small");	// debug
+			System.out.println("too small");	// thats what she said
 			return false;
 		}
 		teams.add(team);

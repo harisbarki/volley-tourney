@@ -1,10 +1,27 @@
 package Model;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * This class is used to create a tournament bracket
@@ -14,12 +31,12 @@ import java.util.Stack;
 public class Bracket 
 {
 	private Queue<Match> matches;
-	private Stack<Match> playedMatches;
 	private int step;
 	private int round;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private Team champion;
+	private ArrayList<Team> nextRound;
 	
 	/**
 	 * This initialization constructor is used to set up the initial
@@ -31,14 +48,13 @@ public class Bracket
 	public Bracket(Tournament t, ArrayList<Team> seededList)
 	{
 		matches = new LinkedList<Match>();
+		nextRound = new ArrayList<Team>();
 		
 		// determine number of rounds to be played
 		int rounds = (int) ((int) Math.log(t.getNumTeams()/2) / Math.log(2)) + 1;
-		System.out.println("rounds : " + rounds);
 		
 		// get tournament type
 		String type = t.getType();
-		System.out.println("type : " + type);
 		
 		// get tournament dates
 		startDate = t.getStartDate();
@@ -133,6 +149,7 @@ public class Bracket
 				startDate = roundDate;
 			}
 		}
+		nextRound = new ArrayList<Team>();
 	}
 	
 	/**
@@ -162,9 +179,13 @@ public class Bracket
 	 * 
 	 * @return The next scheduled match
 	 */
-	public Match startMatch()
+	public Match getNextMatch()
 	{
-		Match m = matches.remove();
+		Match m = null;
+		if(!matches.isEmpty())
+			m = matches.remove();
+		else
+			return m;
 		
 		return m;
 	}
@@ -177,35 +198,13 @@ public class Bracket
 	 */
 	public void endMatch(Match m)
 	{
-		// add finished match to stack
-		playedMatches.push(m);
+		Team t = m.getWinner();
+		nextRound.add(t);
 		
-		if(playedMatches.size() == 2) // if we have two matches on the stack, then create new match from winners of each match
-		{
-			Match m1 = playedMatches.pop();
-			Match m2 = playedMatches.pop();
-			
-			Team t1 = m1.getWinner();
-			Team t2 = m2.getWinner();
-			
-			ArrayList<Team> nextRound = new ArrayList<Team>();
-			nextRound.add(t1);
-			nextRound.add(t2);
-			
-			// if all matches of initial round are over, then create next round matches
-			if(matches.isEmpty())
-				createSERound(nextRound);
-		}
-		else if(matches.isEmpty()) // if only one match on stack and no matches on queue then the tournament is over
-		{
-			// get the tournament champion
-			Match finalMatch = playedMatches.pop();
-			champion = finalMatch.getWinner();
-		}
+		if(matches.isEmpty() && nextRound.size() > 1)
+			createSERound(nextRound);
 		else
-		{
-			// do nothing
-		}
+			champion = nextRound.get(0);
 	}
 	
 	/**
