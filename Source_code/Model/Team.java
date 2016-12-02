@@ -58,6 +58,24 @@ public class Team
 	public int size() {
 		return players.size();
 	}
+
+	public boolean equals(Team other)
+	{
+		if(this.getPlayers().size() != other.getPlayers().size()) return false;
+	
+		if(this.getName().equals(other.getName())) 
+		{
+			if(this.showSeedPos() == other.showSeedPos())
+			{
+				for(int i=0; i<other.getPlayers().size(); i++)
+				{
+					if(this.getPlayers().contains(other.getPlayers().get(i))) return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 	
 	public String toString()
 	{

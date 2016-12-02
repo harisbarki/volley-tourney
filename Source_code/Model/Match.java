@@ -99,4 +99,12 @@ public class Match
 		else
 			return team2;
 	}
+
+	public boolean equals(Match other)
+	{
+		if(this.getTeam1().equals(other.getTeam1()) && this.getTeam2().equals(other.getTeam2())) return true;
+		if(this.getTeam1().equals(other.getTeam2()) && this.getTeam2().equals(other.getTeam1())) return true;
+		
+		return false;
+	}
 }
