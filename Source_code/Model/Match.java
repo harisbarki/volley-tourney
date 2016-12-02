@@ -58,17 +58,11 @@ public class Match
 	
 	// Method to get team1's score
  	public int getScore1() throws Exception {
-		if (!finished) 
-			throw new Exception("Game is not yet finished");
-		
 		return score1;
 	}
  	
 	// Method to get team1's score
  	public int getScore2() throws Exception {
-		if (!finished) 
-			throw new Exception("Game is not yet finished");
-		
 		return score2;
 	}
 	
