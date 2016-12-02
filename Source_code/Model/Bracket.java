@@ -40,7 +40,7 @@ public class Bracket
 	private Team champion;
 	private ArrayList<Team> nextRound;
 	private String type;
-	private final String matchesFile = "tournaments/matches.txt";
+	private final String matchesFile = "matches/matches.txt";
 	
 	/**
 	 * This initialization constructor is used to set up the initial
@@ -368,7 +368,7 @@ public class Bracket
 				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 				
 				// configure save path of current file
-				fileName = "tournaments/" + fileName + ".xml";
+				fileName = "matches/" + fileName + ".xml";
 				
 				// save name of each file created in a certain text file for reading later
 				BufferedWriter bw = null;

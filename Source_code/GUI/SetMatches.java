@@ -68,7 +68,8 @@ public class SetMatches extends JFrame {
 	private JList<String> seedingList;
 	
 	private ArrayList<Team> teams;
-
+	
+	private final String tournamentFile = "tournaments/files.txt";
 
 	public SetMatches(Tournament tourney) {
 		
@@ -202,6 +203,8 @@ public class SetMatches extends JFrame {
 				if(tournament.getSeededTeams().size() == tournament.getNumTeams())
 				{
 					Bracket bracket = new Bracket(tournament,tournament.getSeededTeams());
+					tournament.setBracket(bracket);
+					saveFile(tournament,tournament.getId() + "");
 					ViewSchedules vs = new ViewSchedules(bracket);
 					vs.setVisible(true);
 					dispose();
@@ -249,7 +252,84 @@ public class SetMatches extends JFrame {
 		setVisible(true);
 	}
 
-
+	/**
+	 * This method attempts to save a tournament to a file.
+	 * 
+	 * @param t The tournament
+	 * @param fileName The name of the file
+	 * @return A flag indicating success or failure to save the file
+	 */
+	public boolean saveFile(Tournament t, String fileName)
+	{
+		Document dom;
+		Element e = null;
+		
+		// configure save path of current file
+		fileName = "tournaments/" + fileName + ".xml";
+		
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+		try
+		{
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			
+			// load the xml file
+			dom = db.parse(fileName);
+			
+			Element root = dom.getDocumentElement();
+			
+			NodeList n = root.getElementsByTagName("seededList");
+			e = (Element) n.item(0);
+			
+			for(Team t1 : t.getSeededTeams())
+			{
+				Element team = dom.createElement("teamName");
+				team.appendChild(dom.createTextNode(t1.getName()));
+				e.appendChild(team);
+			}
+			
+			try
+			{
+				// add properties to file and format it
+				Transformer tr = TransformerFactory.newInstance().newTransformer();
+				tr.setOutputProperty(OutputKeys.INDENT, "yes");
+				tr.setOutputProperty(OutputKeys.METHOD, "xml");
+				tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+				tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "tournament.dtd");
+				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+				
+				// save file
+				tr.transform(new DOMSource(dom), new StreamResult(new FileOutputStream(fileName)));
+				return true;
+			}
+			catch(TransformerException te)
+			{
+				System.out.println(te.getMessage());
+				return false;
+			}
+			catch(IOException ioe)
+			{
+				System.out.println(ioe.getMessage());
+				return false;
+			}
+		}
+		catch(ParserConfigurationException pce)
+		{
+			System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
+			return false;
+		}
+		catch(SAXException se)
+		{
+            System.out.println(se.getMessage());
+            return false;
+        }
+		catch(IOException ioe)
+		{
+			System.out.println(ioe.getMessage());
+			return false;
+		}
+	}
 	
 }
 

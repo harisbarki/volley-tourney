@@ -582,7 +582,9 @@ public class CreateTournament extends JFrame implements ActionListener
 			root.appendChild(e);
 			
 			e = dom.createElement("teamList");
-			//e.appendChild(dom.createTextNode("" + t.getMaxAge()));
+			root.appendChild(e);
+			
+			e = dom.createElement("seededList");
 			root.appendChild(e);
 			
 			// append root node to document

@@ -25,8 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -222,12 +220,13 @@ public class MainMenu extends JFrame
 					int selectedTournamentId = s.nextInt();
 					s.close();
 					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
-					Bracket b = new Bracket(selectedTournament, selectedTournament.getSeededTeams());
+					Bracket b = selectedTournament.getBracket();
+					if(b == null) System.out.println("brackets are null");
 					ViewSchedules vs = new ViewSchedules(b);
 					vs.setVisible(true);
 					dispose();
 				}
-				catch(NullPointerException n) {
+				catch(Exception n) {
 					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -334,6 +333,8 @@ public class MainMenu extends JFrame
 		String tName, tType; 
 		int id, numTeams, minAge, maxAge;
 		LocalDate regSD, regED, tSD, tED;
+		String teamName;
+		ArrayList<Team> seededList = new ArrayList<Team>();
 		
 		// xml document for to load file
 		Document dom;
@@ -352,6 +353,21 @@ public class MainMenu extends JFrame
 			// get root element
 			Element root = dom.getDocumentElement();
 			
+			NodeList seeds = root.getElementsByTagName("seededList");
+			Element sList = (Element) seeds.item(0);
+			
+			if(sList != null)
+			{
+				seeds = sList.getElementsByTagName("teamName");
+				
+				for(int i = 0; i < seeds.getLength(); i++)
+				{
+					teamName = seeds.item(i).getFirstChild().getNodeValue();
+					Team team = new Team(teamName);
+					seededList.add(team);
+				}
+			}
+			
 			// for parsing the dates
 			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			
@@ -368,8 +384,10 @@ public class MainMenu extends JFrame
 			maxAge = Integer.parseInt(getTextValue(root, "maxPlayerAge"));
 			
 			// create and return tournament
-			t = new Tournament(tName, tType, tSD, tED, regSD, regED, minAge, maxAge, numTeams);
+			t = new Tournament(tName, tType, tSD, tED, regSD, regED, minAge, maxAge, numTeams);	
 			t.setID(id);
+			t.setSeededTeams(seededList);
+			t.setBracket(new Bracket(t,seededList));
 			return t;
 		}
 		catch(ParserConfigurationException pce)

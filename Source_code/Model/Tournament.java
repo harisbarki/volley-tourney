@@ -199,6 +199,11 @@ public class Tournament
 		return seeding;
 	}
 	
+	public void setSeededTeams(ArrayList<Team> s)
+	{
+		seeding = s;
+	}
+	
 	//gets the list of teams in the tournament
 	public ArrayList<Team> getTeams()
 	{	

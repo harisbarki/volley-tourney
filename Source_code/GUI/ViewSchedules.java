@@ -67,7 +67,7 @@ public class ViewSchedules extends JFrame
 	private JButton btnGetNextRound;
 	private JButton btnUpdateScore;
 	
-	private final String matchesFile = "tournaments/matches.txt";
+	private final String matchesFile = "matches/matches.txt";
 	
 	public ViewSchedules(Bracket bracket)
 	{
@@ -127,13 +127,21 @@ public class ViewSchedules extends JFrame
 		// initialize string list model
 		matchModel = new DefaultListModel<String>();
 		
+		ArrayList<Match> mList = loadMatches();
 		
-		
-		// add list of matches to model
-		Queue<Match> matches = bracket.getMatches();
-		
-		for(Match m : matches)
-			matchModel.addElement(m.getTeam1().getName() + " vs. " + m.getTeam2().getName());
+		if(mList.isEmpty())
+		{
+			// add list of matches to model
+			Queue<Match> matches = bracket.getMatches();
+			
+			for(Match m : matches)
+				matchModel.addElement(m.getTeam1().getName() + " vs. " + m.getTeam2().getName());
+		}
+		else
+		{
+			for(Match m : mList)
+				matchModel.addElement(m.getTeam1().getName() + " vs. " + m.getTeam2().getName());
+		}
 		
 		// initialize list with model and disable selection
 		matchList = new JList<String>(matchModel);
@@ -275,6 +283,134 @@ public class ViewSchedules extends JFrame
 		// set border and add main panel to frame
 		mainPanel.setBorder(new EmptyBorder(20,0,20,0));
 		add(mainPanel, BorderLayout.NORTH);
+	}
+	
+	public ArrayList<Match> loadMatches()
+	{
+		String line = null;
+		ArrayList<Match> matches = new ArrayList<Match>();
+		
+		BufferedReader br;
+		
+		try
+		{
+			// open file for reading
+			FileInputStream fis = new FileInputStream(matchesFile);
+			br = new BufferedReader(new InputStreamReader(fis));
+			
+			// attempt to read from file
+			while((line = br.readLine()) != null)
+			{
+				// skip blank line
+				if(line == "") continue;
+				
+				// get tournament from file
+				Match m = getMatch(line);
+				
+				if(m != null)
+					matches.add(m);
+			}
+
+			br.close();
+			return matches;
+		}
+		catch(IOException ioe)
+		{
+			ioe.printStackTrace();
+			return matches;
+		}
+	}
+	
+	public Match getMatch(String name)
+	{
+		// match object to return
+		Match m = null;
+		
+		// variables to store data from file
+		String name1;
+		String name2;
+		LocalDate schedule;
+		String finished;
+		
+		// xml document for to load file
+		Document dom;
+		
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+		
+		try
+		{
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			
+			// load the xml file
+			dom = db.parse(name);
+			
+			// get root element
+			Element root = dom.getDocumentElement();
+			NodeList temp = root.getElementsByTagName("teamList");
+			Element teamList = (Element) temp.item(0);
+			
+			temp = teamList.getElementsByTagName("team");
+			Element t1 = (Element) temp.item(0);
+			Element t2 = (Element) temp.item(1);
+			
+			// for parsing the dates
+			DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			
+			// get child nodes
+			finished = getTextValue(teamList, "finished");
+			
+			if(finished.equals("true"))
+			{
+				name1 = getTextValue(t1, "name");
+				name2 = getTextValue(t2, "name");
+				schedule = LocalDate.parse(getTextValue(teamList, "schedule"),df);
+				
+				m = new Match(new Team(name1), new Team(name2), schedule);
+			}
+			
+			return m;
+				
+		}
+		catch(ParserConfigurationException pce)
+		{
+            System.out.println(pce.getMessage());
+            return m;
+        }
+		catch(SAXException se)
+		{
+            System.out.println(se.getMessage());
+            return m;
+        }
+		catch(IOException ioe)
+		{
+            System.err.println(ioe.getMessage());
+            return m;
+        }
+	}
+	
+	/**
+	 * This method retrieves the text node at the 
+	 * specified child node.
+	 * 
+	 * @param doc The parent node
+	 * @param tag The child node
+	 * @return The text node value of the child node
+	 */
+	private String getTextValue(Element root, String child)
+	{
+	    String value = "";
+	    
+	    NodeList nl;
+	    nl = root.getElementsByTagName(child);
+	    
+	    if (nl.getLength() > 0 && nl.item(0).hasChildNodes())
+	    {
+	        value = nl.item(0).getFirstChild().getNodeValue();
+	    }
+	    
+	    return value;
 	}
 	
 	/**

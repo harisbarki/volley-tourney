@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT match (teamList,location,schedule,finished,winner,round)>
+<!ELEMENT teamList (team)>
+<!ELEMENT team (name, score)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT score (#PCDATA)>
+<!ELEMENT location (#PCDATA)>
+<!ELEMENT schedule (#PCDATA)>
+<!ELEMENT finished (#PCDATA)>
+<!ELEMENT winner (#PCDATA)>
+<!ELEMENT round (#PCDATA)>
