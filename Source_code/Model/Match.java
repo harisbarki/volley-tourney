@@ -57,12 +57,12 @@ public class Match
 	}
 	
 	// Method to get team1's score
- 	public int getScore1() throws Exception {
+ 	public int getScore1(){
 		return score1;
 	}
  	
 	// Method to get team1's score
- 	public int getScore2() throws Exception {
+ 	public int getScore2(){
 		return score2;
 	}
 	

@@ -9,6 +9,13 @@ import java.awt.Insets;
 import java.awt.MenuBar;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Queue;
 
 import javax.swing.DefaultListModel;
@@ -23,9 +30,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import Model.Bracket;
 import Model.Match;
+import Model.Team;
+import Model.Tournament;
 
 public class ViewSchedules extends JFrame
 {
@@ -49,6 +66,8 @@ public class ViewSchedules extends JFrame
 	private JButton btnStartMatch;
 	private JButton btnGetNextRound;
 	private JButton btnUpdateScore;
+	
+	private final String matchesFile = "tournaments/matches.txt";
 	
 	public ViewSchedules(Bracket bracket)
 	{
@@ -107,6 +126,8 @@ public class ViewSchedules extends JFrame
 		
 		// initialize string list model
 		matchModel = new DefaultListModel<String>();
+		
+		
 		
 		// add list of matches to model
 		Queue<Match> matches = bracket.getMatches();
