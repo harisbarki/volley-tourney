@@ -12,7 +12,7 @@ public class Match
 	private Team team1;
 	private Team team2;
 	private final String LOCATION = "The Works";
-	private LocalDate schedule;
+	private LocalDate date;
 	private boolean finished;
 	private int score1;
 	private int score2;
@@ -22,7 +22,7 @@ public class Match
 	{
 		this.team1 = team1;
 		this.team2 = team2;
-		this.schedule = schedule;
+		this.date = schedule;
 		round = 1;
 		finished = false;
 		score1 = 0;
@@ -73,7 +73,7 @@ public class Match
 	
 	// Method to get the time of the match	
 	public LocalDate getSchedule() {
-		return schedule;
+		return date;
 	}
 	
 	public int getRound()
@@ -96,8 +96,15 @@ public class Match
 
 	public boolean equals(Match other)
 	{
-		if(this.getTeam1().equals(other.getTeam1()) && this.getTeam2().equals(other.getTeam2())) return true;
-		if(this.getTeam1().equals(other.getTeam2()) && this.getTeam2().equals(other.getTeam1())) return true;
+		if(this.getTeam1().equals(other.getTeam1()) && this.getTeam2().equals(other.getTeam2())) 
+		{
+			if(this.getSchedule().compareTo(other.getSchedule()) == 0) return true;
+		}
+		
+		if(this.getTeam1().equals(other.getTeam2()) && this.getTeam2().equals(other.getTeam1())) 
+		{
+			if(this.getSchedule().compareTo(other.getSchedule()) == 0) return true;
+		}
 		
 		return false;
 	}

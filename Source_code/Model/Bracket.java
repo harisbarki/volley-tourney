@@ -67,13 +67,13 @@ public class Bracket
 		
 		int days = endDate.getDayOfYear() - startDate.getDayOfYear(); // determine the num of days in tournament
 		step = days / rounds;										  // determine sets of days per round
-		LocalDate roundDate = endDate.plusDays(step);				  // create a date for the initial round
+		LocalDate roundDate = startDate.plusDays(step);				  // create a date for the initial round
 		
 		// depending on the tournament type create respective bracket
 		if(type.equals("Single Elimination"))
 			createSEBracket(seededList, roundDate);
 		else
-			createDivBracket(seededList);
+			createDivBracket(seededList, roundDate);
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class Bracket
 			
 			if(i % 2 == 0) // set two matches on same date until you are past the round date
 			{
-				// do nothing
+				continue;	// do nothing
 			}
 			else if(startDate.isBefore(roundDate))
 			{
@@ -161,10 +161,32 @@ public class Bracket
 	 * 
 	 * @param seededList The seeded list of teams
 	 */
-	public void createDivBracket(ArrayList<Team> seededList)
+	public void createDivBracket(ArrayList<Team> seededList, LocalDate rd)
 	{
-		
+		for(Team t1 : seededList)
+		{
+			for(int i=0; i<seededList.size(); i++)
+			{
+				Team t2 = seededList.get(i);
+				if(t1.equals(t2)) 						    continue;
+				else if(alreadySet(new Match(t1, t2, rd)))  continue;
+				else 									    matches.add(new Match(t1, t2, rd));
+			}	
+		}
 	}
+	
+	
+	/**
+	 * @param  m 	the match to look up
+	 * @return true if the match has previously been set between two teams
+	 */
+	public boolean alreadySet(Match m)
+	{
+		for(Match temp : matches)
+			if(m.equals(temp))	return true;
+		
+		return false;
+	} 
 	
 	/**
 	 * This method returns the matches to be played.
