@@ -61,14 +61,9 @@ public class Bracket {
 
 		// set the initial round
 		round = 1;
-
-		int days = endDate.getDayOfYear() - startDate.getDayOfYear(); // determine
-																		// the
-																		// num
-																		// of
-																		// days
-																		// in
-																		// tournament
+		
+		// determine the num of days in tournament
+		int days = endDate.getDayOfYear() - startDate.getDayOfYear(); 
 		step = days / rounds; // determine sets of days per round
 		LocalDate roundDate = startDate.plusDays(step); // create a date for the
 														// initial round
@@ -252,8 +247,10 @@ public class Bracket {
 	public Team getChampion() {
 		return champion;
 	}
+
 	/**
 	 * Saves the match in xml
+	 * 
 	 * @param m
 	 */
 

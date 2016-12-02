@@ -16,6 +16,13 @@ public class Match {
 	private int score2;
 	private int round;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param team1
+	 * @param team2
+	 * @param schedule
+	 */
 	public Match(Team team1, Team team2, LocalDate schedule) {
 		this.team1 = team1;
 		this.team2 = team2;
@@ -26,61 +33,107 @@ public class Match {
 		score2 = 0;
 	}
 
-	// Method to input score after game is finished
+	/**
+	 * Finishes the game and inputs final score
+	 * @param x
+	 * @param y
+	 */
 	public void finishGame(int x, int y) {
 		score1 = x;
 		score2 = y;
 		finished = true;
 	}
 
-	// Method to edit the scores of the match
+	/**
+	 * Edits the score of the match
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	public void editScore(int x, int y) {
 		score1 = x;
 		score2 = y;
 	}
 
+	/**
+	 * 
+	 * @return flag for match is finished or not
+	 */
 	public boolean isFinished() {
 		return finished;
 	}
 
-	// Method to get team1's score
+	/**
+	 * 
+	 * @return team 1
+	 */
 	public Team getTeam1() {
 		return team1;
 	}
 
-	// Method to get team2's score
+	/**
+	 * 
+	 * @return team 2
+	 */
 	public Team getTeam2() {
 		return team2;
 	}
 
-	// Method to get team1's score
+	/**
+	 * 
+	 * @return score of team 1
+	 */
 	public int getScore1() {
 		return score1;
 	}
 
-	// Method to get team1's score
+	/**
+	 * 
+	 * @return score of team 2
+	 */
 	public int getScore2() {
 		return score2;
 	}
 
-	// Method to get the location of the match
+	/**
+	 * 
+	 * @return location of match
+	 */
 	public String getLocation() {
 		return LOCATION;
 	}
 
-	// Method to get the time of the match
+	/**
+	 * Method to get the time of the match
+	 * 
+	 * @return time of the match
+	 */
 	public LocalDate getSchedule() {
 		return date;
 	}
 
+	/**
+	 * gets round
+	 * 
+	 * @return
+	 */
 	public int getRound() {
 		return round;
 	}
 
+	/**
+	 * sets round
+	 * 
+	 * @param r
+	 */
 	public void setRound(int r) {
 		round = r;
 	}
 
+	/**
+	 * 
+	 * @return winner team
+	 */
 	public Team getWinner() {
 		if (score1 > score2)
 			return team1;
@@ -88,6 +141,12 @@ public class Match {
 			return team2;
 	}
 
+	/**
+	 * checks if the match is equal
+	 * 
+	 * @param other
+	 * @return
+	 */
 	public boolean equals(Match other) {
 		if (this.getTeam1().equals(other.getTeam1()) && this.getTeam2().equals(other.getTeam2())) {
 			if (this.getSchedule().compareTo(other.getSchedule()) == 0)

@@ -12,6 +12,12 @@ public abstract class Account {
 	@SuppressWarnings("unused")
 	private boolean loggedIn;
 	
+	/**
+	 * Constructor to create an account
+	 * @param username
+	 * @param password
+	 * @param name
+	 */
 	public Account(String username, String password, String name) {
 		this.username = username;
 		this.password = password;
@@ -19,17 +25,28 @@ public abstract class Account {
 		loggedIn = false;
 	}
 	
-	//getter for name of account holder
+	/**
+	 * getter for name of account holder
+	 * @return name of the account holder
+	 */
 	public String getName() {
 		return name;
 	}
 	
-	//getter for username of account
+	/**
+	 * getter for username of the account holder
+	 * @return username
+	 */
 	public String getUsername() {
 		return username;
 	}
 	
 	//method to log into the system.
+	/**
+	 * Method for logging in
+	 * @param password
+	 * @return flag for loggedin
+	 */
 	public boolean logIn(String password) {
 		if(this.password == password) {
 			loggedIn=true;
@@ -39,7 +56,9 @@ public abstract class Account {
 		return false;
 	}
 	
-	// method to log out of the system.
+	/**
+	 * method to log out of the system
+	 */
 	public void logOut() {
 		loggedIn=false;
 	}
