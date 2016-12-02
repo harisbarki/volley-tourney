@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Team
 {	
 	private int seed;
+	private int wins;
 	private String name;
 	private ArrayList<Player> players;
 
@@ -57,6 +58,11 @@ public class Team
 	//Getter for number of players
 	public int size() {
 		return players.size();
+	}
+	
+	public int getWins()
+	{
+		return wins;
 	}
 
 	public boolean equals(Team other)

@@ -6,9 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
-import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +39,7 @@ public class Bracket
 	private LocalDate endDate;
 	private Team champion;
 	private ArrayList<Team> nextRound;
+	private String type;
 	private final String matchesFile = "tournaments/matches.txt";
 	
 	/**
@@ -51,12 +53,12 @@ public class Bracket
 	{
 		matches = new LinkedList<Match>();
 		nextRound = new ArrayList<Team>();
-		
+
 		// determine number of rounds to be played
 		int rounds = (int) ((int) Math.log(t.getNumTeams()/2) / Math.log(2)) + 1;
 		
 		// get tournament type
-		String type = t.getType();
+		type = t.getType();
 		
 		// get tournament dates
 		startDate = t.getStartDate();
@@ -175,6 +177,13 @@ public class Bracket
 		}
 	}
 	
+	/**
+	 * 
+	 */
+	private void createDivRound(ArrayList<Team> teamList) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	/**
 	 * @param  m 	the match to look up
@@ -230,11 +239,15 @@ public class Bracket
 		nextRound.add(t);
 		
 		if(matches.isEmpty() && nextRound.size() > 1)
-			createSERound(nextRound);
+		{
+			if(type.equals("Single Elimination"))
+					createSERound(nextRound);
+			else	createDivRound(nextRound);
+		}
 		else
 			champion = nextRound.get(0);
 	}
-	
+
 	/**
 	 * This method returns the winner of the tournament.
 	 * 
