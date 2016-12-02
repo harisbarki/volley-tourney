@@ -1,2 +1,1 @@
 tournaments/1.xml
-tournaments/2.xml
