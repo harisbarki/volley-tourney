@@ -10,11 +10,11 @@ import java.util.List;
 public class Referee extends Account {
 
 	private List<Match> matchList;
-	
+
 	public Referee(String username, String password, String name) {
 		super(username, password, name);
 	}
-	
+
 	// Method to get the list of matches this referee is refereeing.
 	public List<Match> getMatchList() {
 		return matchList;

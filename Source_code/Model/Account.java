@@ -9,6 +9,7 @@ public abstract class Account {
 	private String username;
 	private String password;
 	private String name;
+	@SuppressWarnings("unused")
 	private boolean loggedIn;
 	
 	public Account(String username, String password, String name) {
