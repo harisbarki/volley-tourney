@@ -205,8 +205,8 @@ public class RegisterTeam extends JFrame {
 					if(lstPlayers.getModel().getSize() == 0) throw new IndexOutOfBoundsException();
 					player = lstPlayers.getSelectedValue();
 					player = player.substring(0, player.indexOf(':') - 1);
-					for (Player p : players) 
-						if (p.getName() == player) players.remove(p);
+					for (int i = 0; i < players.size(); i++) 
+						if (players.get(i).getName().equals(player)) players.remove(players.get(i));
 					model.remove(lstPlayers.getSelectedIndex());					
 				}
 				catch(IndexOutOfBoundsException n) { // handle empty list
