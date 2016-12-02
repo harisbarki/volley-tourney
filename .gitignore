@@ -2,3 +2,7 @@
 *.class
 .classpath
 .project
+Source_code/matches/*.xml
+Source_code/matches/files.txt
+Source_code/tournaments/*.xml
+Source_code/tournaments/files.txt

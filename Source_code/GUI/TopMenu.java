@@ -31,6 +31,9 @@ public class TopMenu extends JFrame {
 		return menuBar;
 	}
 
+	/*
+	* Initializes the top menu bar
+	*/
 	public void initializeMenuBar(MenuBar menuBar) {	
 		mnNewMenu = new Menu("Menu");
 		menuBar.add(mnNewMenu);
