@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 import javax.xml.parsers.DocumentBuilder;
@@ -35,6 +36,10 @@ public class Bracket {
 	private ArrayList<Team> nextRound;
 	private String type;
 	private final String matchesFile = "matches/matches.txt";
+	private boolean finalRound;
+	
+	private ArrayList<Team> div1;
+	private ArrayList<Team> div2;
 
 	/**
 	 * This initialization constructor is used to set up the initial round of
@@ -48,6 +53,10 @@ public class Bracket {
 	public Bracket(Tournament t, ArrayList<Team> seededList) {
 		matches = new LinkedList<Match>();
 		nextRound = new ArrayList<Team>();
+		finalRound = false;
+		
+		div1 = new ArrayList<Team>();
+		div2 = new ArrayList<Team>();
 
 		// determine number of rounds to be played
 		int rounds = (int) ((int) Math.log(t.getNumTeams() / 2) / Math.log(2)) + 1;
@@ -158,7 +167,15 @@ public class Bracket {
 	 *            The seeded list of teams
 	 */
 	public void createDivBracket(ArrayList<Team> seededList, LocalDate rd) {
+		int n = 0;
 		for (Team t1 : seededList) {
+			if(n % 2 == 0)
+				t1.setDivision(1);
+			else
+				t1.setDivision(2);
+			
+			n++;
+			
 			for (int i = 0; i < seededList.size(); i++) {
 				Team t2 = seededList.get(i);
 				if (t1.equals(t2))
@@ -174,9 +191,35 @@ public class Bracket {
 	/**
 	 * 
 	 */
-	private void createDivRound(ArrayList<Team> teamList) {
-		// TODO Auto-generated method stub
-
+	private void createDivRound(ArrayList<Team> div1, ArrayList<Team> div2)
+	{
+		Team t1 = null, t2 = null;
+		int n = div1.size();
+		
+		Collections.sort(div1);
+		Collections.sort(div2);
+		
+		t1 = div1.get(0);
+		t2 = div2.get(0);
+		
+//		for(int i=0; i<n-1; i++)
+//		{
+//			for(int j=i+1; j<n; j++)
+//			{
+//				if(div1.get(i).compareTo(div1.get(j)) > 1)
+//					t1 = div1.get(i);
+//				else t1 = div1.get(j);
+//				
+//				if(div2.get(i).compareTo(div2.get(j)) > 1)
+//					t2 = div2.get(i);
+//				else t2 = div2.get(j);
+//			}
+//		}
+		
+		ArrayList<Team> topTeams = new ArrayList<Team> ();
+		topTeams.add(t1);
+		topTeams.add(t2);
+		createSERound(topTeams);
 	}
 
 	/**
@@ -230,13 +273,41 @@ public class Bracket {
 		Team t = m.getWinner();
 		nextRound.add(t);
 
-		if (matches.isEmpty() && nextRound.size() > 1) {
-			if (type.equals("Single Elimination"))
-				createSERound(nextRound);
+		if (matches.isEmpty() && nextRound.size() > 1)
+			createSERound(nextRound);
+	}
+	
+	public void endMatchDiv(Match m)
+	{
+		// save match first
+		saveMatch(m);
+		
+		Team t = m.getWinner();
+		
+		if(!finalRound)
+		{
+			System.out.println("divison " + t.getDivision());
+			
+			if(t.getDivision() == 1)
+				div1.add(t);
 			else
-				createDivRound(nextRound);
-		} else
-			champion = nextRound.get(0);
+				div2.add(t);
+			
+			//nextRound.add(t);
+			
+			if(matches.isEmpty())
+			{
+				createDivRound(div1, div2);
+				finalRound = true;
+			}
+		}
+		else
+			champion = t;
+	}
+	
+	public String getType()
+	{
+		return type;
 	}
 
 	/**

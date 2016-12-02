@@ -5,11 +5,12 @@ import java.util.ArrayList;
 /* 
  * Stores data for each team
 */
-public class Team {
+public class Team implements Comparable<Team> {
 	private int seed;
 	private int wins;
 	private String name;
 	private ArrayList<Player> players;
+	private int division;
 
 	/**
 	 * Constructor
@@ -128,7 +129,32 @@ public class Team {
 
 		return false;
 	}
-
+	
+	public void setDivision(int div)
+	{
+		division = div;
+	}
+	
+	public int getDivision()
+	{
+		return division;
+	}
+	
+	public int compareTo(Team otherTeam)
+	{
+		if(this.getWins() > otherTeam.getWins())
+			return 1;
+		else if(this.getWins() < otherTeam.getWins())
+			return -1;
+		else return 0;
+	}
+	
+	public void incrementWin()
+	{
+		wins++;
+	}
+	
+	
 	/**
 	 * Beautifies the team into a string
 	 */

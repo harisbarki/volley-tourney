@@ -193,7 +193,10 @@ public class ViewSchedules extends JFrame
 					int score2 = Integer.parseInt(score2Txt.getText());
 					
 					activeMatch.finishGame(score1, score2);
-					bracket.endMatch(activeMatch);
+					
+					if(bracket.getType().equals("Single Elimination"))
+						bracket.endMatch(activeMatch);
+					else bracket.endMatchDiv(activeMatch);
 					
 					team1Label.setText("Team 1");
 					team2Label.setText("Team 2");

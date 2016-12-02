@@ -41,6 +41,12 @@ public class Match {
 	public void finishGame(int x, int y) {
 		score1 = x;
 		score2 = y;
+		
+		if(score1 > score2)
+			team1.incrementWin();
+		else
+			team2.incrementWin();
+		
 		finished = true;
 	}
 
