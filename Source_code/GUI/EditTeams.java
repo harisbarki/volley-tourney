@@ -42,8 +42,8 @@ public class EditTeams extends JPanel {
 	private Tournament tournament;
 	private Team team;
 
-	private final int WIDTH  = 550;
-	private final int HEIGHT = 430;
+	private final int WIDTH  = 750;
+	private final int HEIGHT = 450;
 	
 	/**
 	 * Create the frame.
@@ -127,7 +127,7 @@ public class EditTeams extends JPanel {
 		btnAddPlayer.setBounds(101, 200, 114, 23);
 		add(btnAddPlayer);
 		
-		JButton btnEditTeam = new JButton("Save Team");
+		JButton btnEditTeam = new JButton("Save");
 		btnEditTeam.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				String teamName;
@@ -181,7 +181,7 @@ public class EditTeams extends JPanel {
 				}
 			}
 		});
-		btnRemovePlayer.setBounds(235, 251, 186, 23);
+		btnRemovePlayer.setBounds(300, 251, 186, 23);
 		add(btnRemovePlayer);
 		
 		JLabel lblTournament = new JLabel("Tournament:");
@@ -189,7 +189,6 @@ public class EditTeams extends JPanel {
 		add(lblTournament);
 
 		JLabel tmntLbl = new JLabel(tournament.getName());
-//		JLabel tmntLbl = new JLabel("a very tourney demo");
 		tmntLbl.setBounds(120, 62, 500, 15);
 		add(tmntLbl);
 		
@@ -199,7 +198,7 @@ public class EditTeams extends JPanel {
 		lstPlayers.setModel(model);
 		sp.setViewportView(lstPlayers);
 		add(sp);
-		sp.setBounds(235, 61, 186, 169);
+		sp.setBounds(300, 61, 186, 169);
 	
 	}
 }

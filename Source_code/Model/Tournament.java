@@ -266,12 +266,11 @@ public class Tournament
 						
 			// get root element
 			NodeList child = dom.getElementsByTagName("team");
-			NodeList child2 = dom.getElementsByTagName("player");
 			
 			for (int i = 0; i < child.getLength(); i++)
 			{		
 				Node temp = child.item(i);	
-				Node temp2 = child.item(i);
+				NodeList childList = child.item(i).getChildNodes();
 				
 				//	retrieves all the team names
 				if (temp.getNodeType() == Node.ELEMENT_NODE)
@@ -279,19 +278,23 @@ public class Tournament
 					Element teamRoot = (Element) temp;
 					teamName = getTextValue(child, teamRoot, "teamName");
 					t = new Team(teamName);
+				}
 			
-					for (int k = i; k < child2.getLength(); k++) 
+					for (int k = 0; k < childList.getLength(); k++) 
 					{
-						if (temp2.getNodeType() == Node.ELEMENT_NODE) 
+						Node temp2 = childList.item(k);
+						
+						if ("player".equals(temp2.getNodeName())) 
 						{
 							Element playerRoot = (Element) temp2;
-							playerName = getTextValue(child2, playerRoot, "name");
-							playerAge = Integer.parseInt(getTextValue(child2, playerRoot, "age"));
+							playerName = getTextValue(childList, playerRoot, "name");
+							playerAge = Integer.parseInt(getTextValue(childList, playerRoot, "age"));
 							p = new Player(playerName, playerAge);
 							t.addPlayer(p);
 						}
+
 					}
-				}				
+							
 				tempTeam.add(t);
 			}
 			
