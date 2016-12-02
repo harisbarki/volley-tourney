@@ -189,7 +189,7 @@ public class CreateTournament extends JFrame implements ActionListener {
 		SpinnerModel maxModel = new SpinnerNumberModel(20, 10, 100, 1);
 		maxAge = new JSpinner(maxModel);
 
-		SpinnerModel numModel = new SpinnerNumberModel(2, 2, 100, 1);
+		SpinnerModel numModel = new SpinnerNumberModel(4, 4, 100, 1);
 		numTeams = new JSpinner(numModel);
 
 		// radio buttons
