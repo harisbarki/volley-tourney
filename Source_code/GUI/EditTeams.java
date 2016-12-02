@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,21 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javax.swing.JScrollBar;
 import javax.swing.ListSelectionModel;
 
@@ -40,7 +57,7 @@ public class EditTeams extends JPanel {
 	private DefaultListModel<String> model;
 	
 	private Tournament tournament;
-	private Team team;
+	private Team oldTeam;
 
 	private final int WIDTH  = 750;
 	private final int HEIGHT = 450;
@@ -54,8 +71,7 @@ public class EditTeams extends JPanel {
 		setLayout(null);	
 		
 		this.tournament = tourney;
-		this.team = team;
-		tournament.removeTeam(team);
+		this.oldTeam = team;
 		
 
 		txtTeamName = new JTextField(team.getName());
@@ -136,12 +152,14 @@ public class EditTeams extends JPanel {
 					if (teamName.equals(""))     throw new NullPointerException();
 					if (players.size() < tournament.minimumTeamSize()) throw new IllegalStateException();
 					else {
-						Team team = new Team(teamName);
-						for (Player p : players) team.addPlayer(p);
-						if(tournament.addTeam(team)) {
+						Team newTeam = new Team(teamName);
+						for (Player p : players) newTeam.addPlayer(p);
+						if(tournament.addTeam(newTeam)) {
 							System.out.print(tournament.getName() + ": " + tournament.showTeams());
 							
-							//Edit team in XML????
+							tournament.removeTeam(oldTeam);
+							deleteTeam(tournament.getName(), oldTeam);
+							saveTeam(tournament.getName(), newTeam);
 							
 							JOptionPane.showMessageDialog(null,teamName+ " has been saved!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 						}
@@ -200,5 +218,93 @@ public class EditTeams extends JPanel {
 		add(sp);
 		sp.setBounds(300, 61, 186, 169);
 	
+	}
+	
+	public void deleteTeam(String name, Team t) {
+		
+	}
+	
+	public void saveTeam(String name, Team t)
+	{	
+		// get name for retrieving save file
+		String fileName = "tournaments/" + name + ".xml";
+		
+		// xml document for to load file
+		Document dom;
+				
+		// for building document builder
+		DocumentBuilderFactory dbf =  DocumentBuilderFactory.newInstance();
+				
+		try
+		{
+			// create document using document builder
+			DocumentBuilder db = dbf.newDocumentBuilder();
+					
+			// load the xml file
+			dom = db.parse(fileName);
+			
+			// get root element
+			Element root = dom.getDocumentElement();
+			NodeList teamList = root.getElementsByTagName("teamList");
+			
+			Element tl = (Element) teamList.item(0);
+			Element team = dom.createElement("team");
+		
+			Element s = dom.createElement("teamName");
+			s.appendChild(dom.createTextNode(t.getName()));
+			team.appendChild(s);
+				
+
+			ArrayList<Player> players = t.getPlayers();
+			
+			// for each player create node and append name and age for each
+			for(int i = 0; i < players.size(); i++)
+			{
+				Element p = dom.createElement("player");
+				Element n = dom.createElement("name");
+				Element a = dom.createElement("age");
+					
+				n.appendChild(dom.createTextNode(players.get(i).getName()));
+				a.appendChild(dom.createTextNode("" + players.get(i).getAge()));
+				p.appendChild(n);
+				p.appendChild(a);
+				team.appendChild(p);
+			}
+			tl.appendChild(team);
+			
+			try
+			{
+				// add properties to file and format it
+				Transformer tr = TransformerFactory.newInstance().newTransformer();
+				tr.setOutputProperty(OutputKeys.INDENT, "yes");
+				tr.setOutputProperty(OutputKeys.METHOD, "xml");
+				tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+				tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "tournament.dtd");
+				tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+				
+				// save file
+				tr.transform(new DOMSource(dom), new StreamResult(new FileOutputStream(fileName)));
+			}
+			catch(TransformerException te)
+			{
+				System.out.println(te.getMessage());
+			}
+			catch(IOException ioe)
+			{
+				System.out.println(ioe.getMessage());
+			}
+		}
+		catch(ParserConfigurationException pce)
+		{
+			System.out.println(pce.getMessage());
+		}
+		catch(SAXException se)
+		{
+            System.out.println(se.getMessage());
+        }
+		catch(IOException ioe)
+		{
+			System.out.println(ioe.getMessage());
+		}
 	}
 }
