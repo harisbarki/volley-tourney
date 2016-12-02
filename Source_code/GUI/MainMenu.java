@@ -33,6 +33,7 @@ import org.xml.sax.SAXException;
 
 import GUI.CreateTournament;
 import GUI.TopMenu;
+import Model.Bracket;
 import Model.Team;
 import Model.Tournament;
 
@@ -208,6 +209,25 @@ public class MainMenu extends JFrame
 					tournamentDetails.setVisible(true);
 					s.close();
 				} catch(NullPointerException n) {
+					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		
+		btnViewSchedule.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String selectedTournamentName = tournamentList.getSelectedValue();
+					Scanner s = new Scanner(selectedTournamentName);
+					int selectedTournamentId = s.nextInt();
+					s.close();
+					Tournament selectedTournament = tournaments.get(selectedTournamentId-1);
+					Bracket b = new Bracket(selectedTournament, selectedTournament.getSeededTeams());
+					ViewSchedules vs = new ViewSchedules(b);
+					vs.setVisible(true);
+					dispose();
+				}
+				catch(NullPointerException n) {
 					JOptionPane.showMessageDialog(null, "Please select a tournament", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
